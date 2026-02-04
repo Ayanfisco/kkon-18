@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form view for Stock Location Report -->
+    <record id="stock_location_report_form_view" model="ir.ui.view">
+        <field name="name">stock.location.report.form</field>
+        <field name="model">stock.location.report</field>
+        <field name="arch" type="xml">
+            <form string="Stock Location Reports">
+                <header>
+                    <button name="action_view_stock_quants" string="View Current Stock" type="object"
+                            class="oe_highlight" invisible="not location_id"/>
+                    <button name="action_open_inventory_at_date" string="Inventory at Date" type="object"
+                            class="btn-secondary" invisible="not location_id"/>
+
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="location_id" string="Stock Location" 
+                                   placeholder="Select a stock location..." 
+                                   options="{'no_create': True, 'no_open': True}"
+                                   required="1"/>
+                        </group>
+                    </group>
+                    <separator string="Instructions"/>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                <h4>How to use this report:</h4>
+                                <ol>
+                                    <li>Select a stock location from the dropdown above</li>
+                                    <li>Click <strong>"View Current Stock"</strong> to see the inventory for that location</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+
+    <!-- Remove the enhanced form view and just use the standard one -->
+    <!-- Update the action to use the standard form view -->
+    <record id="action_stock_location_report_enhanced" model="ir.actions.act_window">
+        <field name="name">Stock Location Reports</field>
+        <field name="res_model">stock.location.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="stock_location_report_form_view"/>
+        <field name="target">current</field>
+        <field name="context">{}</field>
+    </record>
+</odoo>

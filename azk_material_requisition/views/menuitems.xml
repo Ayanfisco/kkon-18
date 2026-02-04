@@ -1,0 +1,21 @@
+<odoo>
+    <record id="material_requisition_action" model="ir.actions.act_window">
+        <field name="name">Material Requisitions</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">material.requisition</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    
+    <menuitem id="material_requisition_root"
+        name="Material Requisition"
+        web_icon="azk_material_requisition,static/description/icon.png"/>
+
+    <menuitem id="material_requisition_main" parent="material_requisition_root"
+        name="Material Requisition"/>
+
+    <menuitem id="material_requisition" parent="material_requisition_main"
+        name="Material Requisitions" action="material_requisition_action"/>
+
+    <menuitem id="purchase_request" parent="purchase.menu_procurement_management"
+        name="Purchase Requests" action="purchase_request_action"/>
+</odoo>

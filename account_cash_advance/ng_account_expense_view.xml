@@ -1,0 +1,192 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_account_cash_advance_main_form">
+            <field name="name">cash.advance.form</field>
+            <field name="model">cash.advance</field>
+            <field name="arch" type="xml">
+                <form string="Cash Advances">
+                    <header>
+                        <button name="validate" invisible="state != 'draft'" string="Confirm"
+                            type="object" class="oe_highlight" />
+                        <button name="approve" invisible="state != 'open'" string="Approve" type="object"
+                            class="oe_highlight" groups="account_cash_advance.advance_manager" />
+                        <button name="set_to_draft" invisible="state != 'reject'" string="Set to Draft"
+                            groups="account_cash_advance.advance_manager" type="object" />
+                        <button name="set_to_close" invisible="state != 'open'" string="Reject"
+                            type="object" groups="account_cash_advance.advance_manager" />
+                        <button name="create_move" string="Pay" invisible="state != 'approve'"
+                            type="object" class="oe_highlight" groups="account.group_account_user" />
+                        <button name="set_to_close_paid" invisible="state != 'approve'" string="Reject"
+                            type="object" groups="account.group_account_user" />
+                        <button name="set_to_draft_app" invisible="state != 'cancel'" string="Set to Draft"
+                            type="object" groups="account_cash_advance.advance_manager" />
+                        <button name="set_to_cancel" invisible="state != 'draft'" string="Cancel"
+                            type="object" groups="account_cash_advance.advance_manager" />
+                        <field name="state" readonly="1" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" />
+                            <h1>
+                                <field name="name" placeholder="e.g. Trip to Abuja"/>
+                            </h1>
+                            <label for="emp_id" class="oe_edit_only" />
+                            <h2>
+                                <field name="emp_id" />
+                            </h2>
+                        </div>
+                        <group>
+                            <group string="General">
+                                 <group>
+                                    <field name="department_id" />
+                                    <!--<field name="expense_id" domain="[('employee_id', '=', emp_id),
+                                        ('state', '=', 'paid')]"/> -->
+                                    <field name="advance" readonly="0" />
+                                </group>
+                                <group>
+                                    <field name="currency_id" />
+                                    <field name="company_id" />
+                                    <field name="amount_total" />
+                                </group>
+                                <group>
+                                    <field name="ex_amount" readonly="1" invisible="1" />
+                                    <field name="balance" readonly="1" />
+                                </group>
+                                <group>
+                                    <field name="ret_amount" readonly="1" />
+                                    <field name="amount_open" readonly="1" />
+                                </group>
+                                <group>
+                                    <field name="date" />
+                                    <field name="manager_id" />
+                                </group>
+                                <group>
+                                    <field name="approval_date" />
+                                    <field name="user_id" />
+                                    <field name="company_id" widget="selection" groups="base.group_multi_company" />
+                                </group>
+                             </group>
+                             <group string="Accounting Information" >
+                                <field name="update_cash" groups="account.group_account_user"
+                                    invisible="state not in ('approve', 'paid')" />
+                                <field name="cash_id"
+                                    groups="account.group_account_user"
+                                    invisible="not update_cash"
+                                    required="update_cash">
+                                </field>
+                             </group>
+                            <group>
+                                <field name="move" groups="account.group_account_user"
+                                    invisible="state not in ('approve', 'paid')"
+       required="state == 'approve'" />
+                                <field name="journal_id" groups="account.group_account_user"
+                                     />
+                            </group>
+                            <group>
+                                <field name="employee_account"
+                                    groups="account.group_account_user" />
+                                <field name="move_id1" groups="account.group_account_user"
+                                       invisible="state not in ('approve', 'paid')" />
+                            </group>
+                            <group  string="Notes">
+                                <field name="notes" nolabel="1" />
+                            </group>
+                        </group>
+                    </sheet>
+                    <chatter/>
+<!--                    <div class="oe_chatter">-->
+<!--                        <field name="message_follower_ids" widget="mail_followers" />-->
+<!--                        <field name="message_ids" widget="mail_thread" />-->
+<!--                    </div>-->
+
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_account_cash_advance_main_tree">
+            <field name="name">cash.advance.tree</field>
+            <field name="model">cash.advance</field>
+            <field name="arch" type="xml">
+                <list string="Cash Advances">
+                    <field name="name"/>
+                    <field name="emp_id" />
+                    <field name="user_id" invisible="1" />
+                    <field name="department_id" invisible="1" />
+                    <field name="date" />
+                    <field name="approval_date" invisible="1" />
+                    <field name="expense_id" invisible="1" />
+                    <field name="journal_id" invisible="1" />
+                    <field name="employee_account" invisible="1" />
+                    <field name="advance" />
+                    <field name="currency_id" />
+                    <field name="ex_amount" invisible="1" />
+                    <field name="manager_id" />
+                    <field name="company_id" widget="selection" groups="base.group_multi_company" />
+                    <field name="state"/>
+<!--                    <button name="approve" invisible="state != 'open'" string="Approve" type="object"-->
+<!--                        groups="account_cash_advance.advance_manager" />-->
+<!--                    <button name="set_to_close" invisible="state != 'open'" string="Reject"-->
+<!--                        type="object" groups="account_cash_advance.advance_manager"/>-->
+                </list>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="action_account_cash_advance">
+            <field name="name">Expense Advances Request</field>
+            <field name="res_model">cash.advance</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="action_account_cash_advance1">
+            <field name="name">Expense Advances to Approve</field>
+            <field name="res_model">cash.advance</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem name="Expense Advances" parent="menu_open_salary_advance" id="menu_open_salary_cash_advance_child" sequence="4" />
+        <menuitem parent="menu_open_salary_cash_advance_child" sequence="1000" id="action_account_cash_advance_menu" action="action_account_cash_advance" />
+        <menuitem parent="menu_open_salary_cash_advance_child" sequence="10001" groups="account_cash_advance.advance_manager" id="action_account_cash_advance_menu1" action="action_account_cash_advance1" />
+        <record model="ir.actions.act_window" id="action_account_cash_advance1_account">
+            <field name="name">Expense Advances</field>
+            <field name="res_model">cash.advance</field>
+<!--            <field name="view_type">form</field>-->
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_account_cash_advance_paid">
+            <field name="name">Expense Advances to Disburse</field>
+            <field name="res_model">cash.advance</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_finance_cash_advance_salary_main" name="Expense Advances" parent="menu_finance_advance_salary_main0" sequence="300" />
+        <menuitem id="menu_finance_cash_advance_salary_account" name="Expense Advances" action="action_account_cash_advance1_account" parent="menu_finance_cash_advance_salary_main" sequence="999" />
+        <menuitem id="menu_finance_cash_advance_salary" name="Expense Advances to Disburse" action="action_account_cash_advance_paid" parent="menu_finance_cash_advance_salary_main"  sequence="1000" />
+        <menuitem id="menu_finance_cash_advance_salary" sequence="40000" groups="account_cash_advance.advance_manager" name="Expense Advances to Disburse"  action="action_account_cash_advance_paid" parent="menu_open_salary_cash_advance_child" />
+
+
+        <record id="employee_extd_form_advance_cash" model="ir.ui.view">
+            <field name="name">cash.advance.employee.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='hr_settings']" position="inside">
+                   <group string="Expense Limit Settings">
+                    <field name="limit" />
+                    <field name="currency_id" />
+                    <field name="balance" />
+                    <field name="salary_advance_current" />
+                    </group>
+                </xpath>
+                <xpath expr="//notebook" position="inside">
+                    <page string="Cash Advances">
+                            <field name="cash_ids" nolabel="1" />
+                    </page>
+                </xpath>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

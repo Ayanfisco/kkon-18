@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_purchase_requisition_extends_form" model="ir.ui.view">
+        <field name="name">az.purchase.request.form.view.extend</field>
+        <field name="model">az.purchase.request</field>
+        <field name="inherit_id" ref="azk_material_requisition.purchase_request_from_view"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_approve" type="object"
+                        string="Approve"
+                        invisible="state == 'to_approve'"
+                        class="btn-primary"
+                        groups="azk_material_requisition_extends.azk_material_requisition_inventory_manager_group"/>
+
+                <button name="action_in_progress" type="object"
+                        string="Inventory Manager Approve"
+                        invisible="state == 'approved'"
+                        class="btn-primary"
+                        groups="azk_material_requisition_extends.azk_material_requisition_inventory_manager_group"/>
+
+
+                <button name="action_done" type="object"
+                        string="Done"
+                        invisible="state == 'in_progress'"
+                        class="btn-primary"
+                        groups="azk_material_requisition_extends.azk_material_requisition_inventory_manager_group"/>
+
+                <button name="action_cancel" type="object"
+                        string="Cancel"
+                        invisible="state not in ('to_approve','approved','done','in_progress')"
+                        class="btn-secondary"
+                        groups="azk_material_requisition_extends.azk_material_requisition_inventory_manager_group"/>
+
+                <button name="action_reset" type="object"
+                        string="Reset"
+                        invisible="state == 'cancel'"
+                        class="btn-secondary"
+                        groups="azk_material_requisition_extends.azk_material_requisition_inventory_manager_group"/>
+            </header>
+            <xpath expr="//header/field[@name='state']" position="replace">
+                <field name="state" widget="statusbar"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

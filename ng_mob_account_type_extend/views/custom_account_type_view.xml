@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_custom_account_type_tree" model="ir.ui.view">
+        <field name="name">custom.account.type.tree</field>
+        <field name="model">custom.account.type</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="internal_group"/>
+                <field name="name"/>
+                <field name="code"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_custom_account_type_form" model="ir.ui.view">
+        <field name="name">custom.account.type.form</field>
+        <field name="model">custom.account.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="internal_group"/>
+                        <field name="name"/>
+                        <field name="code"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_custom_account_type" model="ir.actions.act_window">
+        <field name="name">Custom Account Types</field>
+        <field name="res_model">custom.account.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_custom_account_type"
+              name="Custom Account Types"
+              parent="account.account_account_menu"
+              action="action_custom_account_type"
+              sequence="5"/>
+</odoo>
+
+

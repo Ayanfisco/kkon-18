@@ -1,0 +1,89 @@
+<odoo>
+  <data>
+    <record id="contract_contract_customer_form_view" model="ir.ui.view">
+      <field name="name">contract.contract.form.inherit</field>
+      <field name="model">contract.contract</field>
+      <field name="inherit_id" ref="contract.contract_contract_customer_form_view"/>
+      <field name="arch" type="xml">
+          <xpath expr="//field[@name='name']" position="attributes">
+            <attribute name="readonly">1</attribute>
+            <attribute name="required">False</attribute>
+          </xpath>
+
+          <xpath expr="//field[@name='user_id']" position="attributes">
+            <attribute name="invisible">1</attribute>
+          </xpath>
+
+          <xpath expr="//field[@name='fiscal_position_id']" position="attributes">
+            <attribute name="invisible">1</attribute>
+          </xpath>
+
+          <xpath expr="//field[@name='recurring_invoicing_type']" position="attributes">
+            <attribute name="invisible">1</attribute>
+          </xpath>
+
+          <xpath expr="//field[@name='journal_id']" position="attributes">
+            <attribute name="invisible">1</attribute>
+          </xpath>
+
+          <xpath expr="//field[@name='line_recurrence']" position="attributes">
+            <attribute name="invisible">1</attribute>
+          </xpath>
+
+          <xpath expr="//field[@name='generation_type']" position="attributes">
+            <attribute name="invisible">1</attribute>
+          </xpath>
+
+          <field name="partner_id" position="before">
+            <field name="ip_address" invisible="not name" readonly="1"/>
+            <field name="enabled" invisible="not name"/>
+            <field name="activated" invisible="not name" readonly="1"/>
+          </field>
+
+          <header>
+            <button name="sync_data" icon="fa-refresh" string="Sync" type="object" style="float:right;"/>
+          </header>
+
+      </field>
+    </record>
+
+    <record id="contract_contract_tree_view" model="ir.ui.view">
+      <field name="name">contract.contract.tree.inherit</field>
+      <field name="model">contract.contract</field>
+      <field name="inherit_id" ref="contract.contract_contract_tree_view"/>
+      <field name="arch" type="xml">
+        <data>
+          <xpath expr="//field[@name='tag_ids']" position="after">
+            <field name="ip_address"/>
+            <field name="enabled"/>
+            <field name="activated"/>
+            <button name="sync_data" string="Sync" type="object" icon="fa-refresh" />
+          </xpath>
+        </data>
+      </field>
+    </record>
+
+    <record id="contract_template_form_view" model="ir.ui.view">
+      <field name="name">contract.template.form.inherit</field>
+      <field name="model">contract.template</field>
+      <field name="inherit_id" ref="contract.contract_template_form_view"/>
+      <field name="arch" type="xml">
+        <data>
+          <xpath expr="//field[@name='contract_type']" position="attributes">
+            <attribute name="invisible">1</attribute>
+          </xpath>
+
+          <xpath expr="//field[@name='company_id']" position="attributes">
+            <attribute name="invisible">1</attribute>
+          </xpath>
+
+          <xpath expr="//field[@name='journal_id']" position="attributes">
+            <attribute name="invisible">1</attribute>
+          </xpath>
+
+        </data>
+      </field>
+    </record>
+
+  </data>
+</odoo>

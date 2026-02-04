@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+    
+        <record id="sequence_payment_settlement" model="ir.sequence">
+            <field name="name">Payment Settlement</field>
+            <field name="code">ng_advance_payment.settlement</field>
+            <field name="prefix">ADVS/</field>
+            <field name="padding">4</field>
+        </record>
+    
+    </data>
+    
+</odoo>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="email_template_payment_expiration" model="mail.template">
+            <field name="name">Payment Expiration</field>
+            <field name="model">res.partner</field>
+            <field name="subject">
+                {{ (object.company_id or object._get_followup_responsible().company_id).name }}
+                Expiration Notification- {{ object.commercial_company_name }}
+            </field>
+            <field name="email_from">{{ object._get_followup_responsible().email_formatted }}</field>
+            <field name="body_html" type="html">
+                <div style="font-family: Arial, sans-serif; font-size: 13px; color: #222;">
+                    <p>Dear <t t-out="object.name"/>,</p>
+
+                    <p>
+                        Please be informed that your subscription has expired.
+                        To restore full access and avoid further disruptions, kindly proceed with renewal at your earliest convenience.
+                        The renewal invoice is attached for your reference.
+                    </p>
+
+                    <p>For assistance, please contact our Accounts Team:</p>
+                    <p>
+                        <strong>Email:</strong> Account@kkontech.com<br/>
+                        <strong>Phone:</strong> <t t-out="object.company_id.phone or '+234 XXX XXX XXXX'"/>
+                    </p>
+
+                    <p>Thank you for your continued partnership.</p>
+                    <p><strong>Thank you for choosing KKONTech.</strong></p>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+        <record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@id='contacts_settings']" position="after">
+                    <div id="eservice_setting">
+                        <h2>EService Integration Settings</h2>
+                        <div class="row mt16 o_settings_container" name="eservice_setting_container">
+                            <div class="col-xs-12 col-md-6 o_setting_box" id="deferred_revenue">
+                                <div class="o_setting_right_pane" id="deferred_revenue">
+                                    <div class="o_form_label">
+                                            Deferred Revenue Account
+                                    </div>
+                                    <field name="deferred_revenue_account_id" />
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-6 o_setting_box" id="advance_account">
+                                <div class="o_setting_right_pane" id="advance_account">
+                                    <div class="o_form_label">
+                                            Advance Account
+                                    </div>
+                                    <field name="advance_account_id" />
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-6 o_setting_box" id="default_company">
+                                <div class="o_setting_right_pane" id="company">
+                                    <div class="o_form_label">
+                                            Default Company
+                                    </div>
+                                    <field name="eservice_company_id" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+
+</odoo>

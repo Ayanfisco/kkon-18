@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Welcome Email Template -->
+        <record id="welcome_email" model="mail.template">
+            <field name="name">Welcome Email</field>
+            <field name="subject">Welcome to KKON Internet Services</field>
+            <field name="email_from">${object.company_id.email|safe}</field>
+            <field name="use_default_to">True</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="model_id" ref="model_contract_contract"/>
+            <field name="body_html">
+                <![CDATA[
+                    <p>Dear <t t-out="object.partner_id.name"/>,</p>
+                    <p>Welcome to KKON Internet Services!</p>
+                    <p>Portal activation instructions will be sent in a separate email.</p>
+                    <p>If you have any questions, our support team is here to help at <a t-attf-href="mailto:support@kkon.com">support@kkon.com</a> or (123) 456-7890.</p>
+                    <p><a href="https://odoo.kkontech.com:8001/web/login" class="btn btn-sm btn-info">Click here</a> to visit our customer portal.</p>
+                    <p>Thank you for choosing KKON Internet Services.</p>
+                    <p>Best regards,<br/>KKON Internet Services</p>
+                ]]>
+            </field>
+        </record>
+
+        <!-- Payment Confirmation Email Template -->
+        <record id="payment_confirmation_email" model="mail.template">
+            <field name="name">Payment Confirmation Email</field>
+            <field name="subject">Payment Confirmation</field>
+            <field name="email_from">${object.company_id.email|safe}</field>
+            <field name="use_default_to">True</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="model_id" ref="contract.model_account_move"/>
+            <field name="body_html">
+                <![CDATA[
+                    <p>Dear <t t-out="object.partner_id.name"/>,</p>
+                    <p>We have received your payment of <span t-out="format_amount(object.amount_total, object.currency_id) or ''">₦ 12,075.00</span> for invoice #<t t-out="object.name"/>.
+                    </p>
+                    <p>Payment Date: <t t-out="object.invoice_date"/></p>
+                    <p>Thank you for your prompt payment. Your service will remain active.</p>
+                    <p><a href="https://odoo.kkontech.com:8001/web/login" class="btn btn-sm btn-info">Click here</a> to visit our customer portal.</p>
+                    <p>Best regards,<br/>KKON Internet Services</p>
+                ]]>
+            </field>
+        </record>
+
+        <!-- Service Activation Email Template -->
+        <record id="service_activation_email" model="mail.template">
+            <field name="name">Service Activation Email</field>
+            <field name="subject">Service Activation</field>
+            <field name="email_from">${object.company_id.email|safe}</field>
+            <field name="use_default_to">True</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="model_id" ref="model_contract_contract"/>
+            <field name="body_html">
+                <![CDATA[
+                    <p>Dear <t t-out="object.partner_id.name"/>,</p>
+                    <p>We are pleased to inform you that your internet service has been activated.</p>
+                    <p>Activation Date: <t t-out="object.date_start"/></p>
+                    <p>Plan: <t t-out="object.contract_template_id.name"/></p>
+                    <p><a href="https://odoo.kkontech.com:8001/web/login" class="btn btn-sm btn-info">Click here</a> to visit our customer portal.</p>
+                    <p>For assistance, contact us at <a t-attf-href="mailto:support@kkon.com">support@kkon.com</a> or (123) 456-7890.</p>
+                    <p>Thank you for choosing KKON Internet Services.</p>
+                    <p>Best regards,<br/>KKON Internet Services</p>
+                ]]>
+            </field>
+        </record>
+
+        <!-- Service Termination Email Template -->
+        <record id="service_termination_email" model="mail.template">
+            <field name="name">Service Termination Email</field>
+            <field name="subject">Service Termination</field>
+            <field name="email_from">${object.company_id.email|safe}</field>
+            <field name="use_default_to">True</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="model_id" ref="contract.model_account_move"/>
+            <field name="body_html">
+                <![CDATA[
+                    <p>Dear <t t-out="object.partner_id.name"/>,</p>
+                    <p>This is to inform you that your internet service will be terminated on <t t-out="object.invoice_date_due"/> due to non-payment.</p>
+                    <p>Outstanding Balance: <span t-out="format_amount(object.amount_total, object.currency_id) or ''">₦ 12,075.00</span> for invoice #<t t-out="object.name"/></p>
+                    <p>To reactivate your service, please contact us.</p>
+                    <p><a href="https://odoo.kkontech.com:8001/web/login" class="btn btn-sm btn-info">Click here</a> to visit our customer portal.</p>
+                    <p>We regret any inconvenience caused.</p>
+                    <p>Best regards,<br/>KKON Internet Services</p>
+                ]]>
+            </field>
+        </record>
+
+        <!-- Account Suspension Email Template -->
+        <record id="account_suspension_email" model="mail.template">
+            <field name="name">Account Suspension Email</field>
+            <field name="subject">Account Suspension</field>
+            <field name="email_from">${object.company_id.email|safe}</field>
+            <field name="use_default_to">True</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="model_id" ref="model_contract_contract"/>
+            <field name="body_html">
+                <![CDATA[
+                    <p>Dear <t t-out="object.partner_id.name"/>,</p>
+                    <p>Your account has been suspended due to non-payment.</p>
+                    <p>To reactivate your service, please pay your outstanding invoices.</p>
+                    <p><a href="https://odoo.kkontech.com:8001/web/login" class="btn btn-sm btn-info">Click here</a> to visit our customer portal.</p>
+                    <p>Best regards,<br/>KKON Internet Services</p>
+                ]]>
+            </field>
+        </record>
+
+        <!-- Upcoming Invoice Reminder Email Template -->
+        <record id="upcoming_invoice_reminder_email" model="mail.template">
+            <field name="name">Upcoming Invoice Reminder Email</field>
+            <field name="subject">Upcoming Invoice Reminder: [DAYS] days before due date</field>
+            <field name="email_from">${object.company_id.email|safe}</field>
+            <field name="use_default_to">True</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="model_id" ref="contract.model_account_move"/>
+            <field name="body_html">
+                <![CDATA[
+                    <p>Dear <t t-out="object.partner_id.name"/>,</p>
+                    <p>This is a reminder that your invoice #[<t t-out="object.name"/>] is due in [DAYS] days.</p>
+                    <p>Amount Due: <span t-out="format_amount(object.amount_total, object.currency_id) or ''">₦ 12,075.00</span> for invoice #<t t-out="object.name"/></p>
+                    <p><a href="https://odoo.kkontech.com:8001/web/login" class="btn btn-sm btn-info">Click here</a> to visit our customer portal.</p>
+                    <p>Thank you,<br/>KKON Internet Services</p>
+                ]]>
+            </field>
+        </record>
+
+        <!-- Outstanding Invoice Reminder Email Template -->
+        <record id="outstanding_invoice_reminder_email" model="mail.template">
+            <field name="name">Outstanding Invoice Reminder Email</field>
+            <field name="subject">Outstanding Invoice Reminder: [DAYS] days overdue</field>
+            <field name="email_from">${object.company_id.email|safe}</field>
+            <field name="use_default_to">True</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="model_id" ref="contract.model_account_move"/>
+            <field name="body_html">
+                <![CDATA[
+                    <p>Dear <t t-out="object.partner_id.name"/>,</p>
+                    <p>Our records indicate that invoice #[<t t-out="object.name"/>] is [DAYS] days [OVERDUE].</p>
+                    <p>Amount Due: <span t-out="format_amount(object.amount_total, object.currency_id) or ''">₦ 12,075.00</span> for invoice #<t t-out="object.name"/></p>
+                    <p>Original Due Date: <t t-out="object.invoice_date_due"/></p>
+                    <p><a href="https://odoo.kkontech.com:8001/web/login" class="btn btn-sm btn-info">Click here</a> to visit our customer portal.</p>
+                    <p>Thank you for your attention to this matter.</p>
+                    <p>Best regards,<br/>KKON Internet Services</p>
+                ]]>
+            </field>
+        </record>
+
+        <record id="email_template_contract_invoice" model="mail.template">
+            <field name="name">Contract Invoice</field>
+            <field name="model_id" ref="contract.model_account_move"/>
+            <field name="email_from">${object.company_id.email|safe}</field>
+            <field name="use_default_to">True</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="subject">Your Invoice from KKON Internet Services</field>
+            <field name="body_html">
+                <![CDATA[
+                    <p>Dear <t t-out="object.partner_id.name"/>,</p>
+                    <p>There is a new invoice <t t-out="object.name"/> in your account.</p>
+                    <p>Amount Due: <span t-out="format_amount(object.amount_total, object.currency_id) or ''">₦ 12,075.00</span> for invoice #<t t-out="object.name"/></p>
+                    <p>Due Date: <t t-out="object.invoice_date_due"/></p>
+                    <p><a href="https://odoo.kkontech.com:8001/web/login" class="btn btn-sm btn-info">Click here</a> to visit our customer portal.</p>
+                    <p>Thank you for your business.</p>
+                    <p>Best regards,<br/>KKON Internet Services</p>
+                ]]>
+            </field>
+        </record>
+    </data>
+</odoo>

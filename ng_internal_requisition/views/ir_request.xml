@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- explicit list view definition -->
+        <record model="ir.ui.view" id="ng_internal_requisition_list">
+            <field name="name">ng_internal_requisition list</field>
+            <field name="model">ng.ir.request</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name" />
+                    <field name="requester" />
+                    <field name="end_user" />
+                    <field name="request_date" />
+                    <field name="request_deadline" />
+                    <field name="state" />
+                </list>
+            </field>
+        </record>
+
+        <record id="ng_internal_requisition_form_1_01" model="ir.ui.view">
+            <field name="name">ng_internal_requisition.form</field>
+            <field name="model">ng.ir.request</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <!-- User -->
+                        <button name="submit" string="Submit To HOD" type="object"
+                                class="oe_highlight"
+                                groups="ng_internal_requisition.ng_internal_requisition_user"
+                                invisible="state != 'draft'"/>
+
+                        <!-- Department Manager / HOD -->
+                        <button name="department_manager_approve" string="Approve By HOD" type="object"
+                                class="oe_highlight"
+                                groups="ng_internal_requisition.ng_internal_requisition_dept_manager"
+                                context="{'approved': True}"
+                                invisible="state != 'submit'"/>
+                        <button name="department_manager_approve" string="Reject By HOD" type="object"
+                                groups="ng_internal_requisition.ng_internal_requisition_dept_manager"
+                                context="{'approved': False}"
+                                invisible="state != 'submit'"/>
+
+                        <!-- Finance -->
+                        <button name="store_officer_approve" string="Approve By Finance" type="object"
+                                class="oe_highlight"
+                                groups="ng_internal_requisition.ng_internal_requisition_finance"
+                                context="{'approved': True}"
+                                invisible="state != 'approved'"/>
+                        <button name="store_officer_approve" string="Reject By Finance" type="object"
+                                groups="ng_internal_requisition.ng_internal_requisition_finance"
+                                context="{'approved': False}"
+                                invisible="state != 'approved'"/>
+
+                        <!-- Procurement -->
+                        <button name="internal_confirmation" string="Approve By Procurement" type="object"
+                                class="oe_highlight"
+                                groups="ng_internal_requisition.ng_internal_requisition_procurement"
+                                context="{'approved': True}"
+                                invisible="state != 'audit'"/>
+                        <button name="internal_confirmation" string="Reject By Procurement" type="object"
+                                groups="ng_internal_requisition.ng_internal_requisition_procurement"
+                                context="{'approved': False}"
+                                invisible="state != 'audit'"/>
+
+                        <!-- Statusbar -->
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,submit,approved,audit,done"/>
+                    </header>
+
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" readonly="True"/>
+                                <field name="requester" required="True" readonly="True"/>
+                                <field name="request_date" required="True" readonly="True"/>
+                                <field name="request_deadline"/>
+                                <field name="warehouse_id" required="state == 'warehouse'"/>
+                                <field name="company_id" invisible="True"/>
+                            </group>
+                            <group>
+                                <field name="end_user" readonly="True"/>
+                                <field name="hod" readonly="state != 'draft'"/>
+                                <field name="department" readonly="True"/>
+                            </group>
+                            <group>
+                                <field name="purchase_agreement_id" invisible="not is_purchase_agreement"/>
+                                <field name="is_purchase_agreement" invisible="True"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <!-- Rejection Reason -->
+                            <page string="Rejection Reason" invisible="not reason">
+                                <field name="reason" readonly="True"/>
+                            </page>
+
+                            <!-- Requisition Lines -->
+                            <page string="Requisition">
+                                <field name="approve_request_ids">
+                                    <list editable="bottom">
+                                        <field name="product_id" required="1" readonly="parent.state in ['submit','approved','cpo','done']"/>
+                                        <field name="quantity" required="1" readonly="parent.state in ['submit','approved','cpo','done']"/>
+                                        <field name="uom" readonly="parent.state in ['submit','approved','cpo','done']"/>
+                                        <field name="purchase_agreement_id"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <!-- actions opening views on models -->
+        <record model="ir.actions.act_window" id="ng_internal_requisition_action_window">
+            <field name="name">Purchase Requisition</field>
+            <field name="res_model">ng.ir.request</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{'default_request_type': 'purchase'}</field>
+            <field name="domain">[('request_type', '=', 'purchase')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new purchase requisition.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Purchase Requisition"
+                  id="purcahse_requisition_menu"
+                  web_icon="ng_internal_requisition,static/description/icon.png"
+                  action="ng_internal_requisition_action_window" />
+
+    </data>
+</odoo>
+
+
+
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<odoo>-->
+<!--    <data>-->
+<!--        &lt;!&ndash; explicit list view definition colors="grey:state == 'done'" &ndash;&gt;-->
+<!--        <record model="ir.ui.view" id="ng_internal_requisition_list">-->
+<!--            <field name="name">ng_internal_requisition list</field>-->
+<!--            <field name="model">ng.ir.request</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <list>-->
+<!--                    <field name="name" />-->
+<!--                    <field name="requester" />-->
+<!--                    <field name="end_user" />-->
+<!--                    <field name="request_date" />-->
+<!--                    <field name="request_deadline" />-->
+<!--                    <field name="state" />-->
+<!--                </list>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="ng_internal_requisition_form_1_01" model="ir.ui.view">-->
+<!--        <field name="name">ng_internal_requisition.form</field>-->
+<!--        <field name="model">ng.ir.request</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--        <form>-->
+<!--            <header>-->
+<!--                &lt;!&ndash; User &ndash;&gt;-->
+<!--                <button name="submit" string="Submit To HOD" type="object"-->
+<!--                        class="oe_highlight"-->
+<!--                        groups="ng_internal_requisition.ng_internal_requisition_user"-->
+<!--                        invisible="not state == 'draft'"/>-->
+
+<!--                &lt;!&ndash; Department Manager / HOD &ndash;&gt;-->
+<!--                <button name="department_manager_approve" string="Approve By HOD" type="object"-->
+<!--                        class="oe_highlight"-->
+<!--                        groups="ng_internal_requisition.ng_internal_requisition_dept_manager"-->
+<!--                        context="{'approved': True}"-->
+<!--                        invisible="not state == 'submit'"/>-->
+<!--                <button name="department_manager_approve" string="Reject By HOD" type="object"-->
+<!--                        groups="ng_internal_requisition.ng_internal_requisition_dept_manager"-->
+<!--                        context="{'approved': False}"-->
+<!--                        invisible="not state == 'submit'"/>-->
+
+<!--                &lt;!&ndash; Finance &ndash;&gt;-->
+<!--                <button name="store_officer_approve" string="Approve By Finance" type="object"-->
+<!--                        class="oe_highlight"-->
+<!--                        groups="ng_internal_requisition.ng_internal_requisition_finance"-->
+<!--                        context="{'approved': True}"-->
+<!--                        invisible="not state == 'approved'"/>-->
+<!--                <button name="store_officer_approve" string="Reject By Finance" type="object"-->
+<!--                        groups="ng_internal_requisition.ng_internal_requisition_finance"-->
+<!--                        context="{'approved': False}"-->
+<!--                        invisible="not state == 'approved'"/>-->
+
+<!--                &lt;!&ndash; Procurement &ndash;&gt;-->
+<!--                <button name="internal_confirmation" string="Approve By Procurement" type="object"-->
+<!--                        class="oe_highlight"-->
+<!--                        groups="ng_internal_requisition.ng_internal_requisition_procurement"-->
+<!--                        context="{'approved': True}"-->
+<!--                        invisible="not state == 'audit'"/>-->
+<!--                <button name="internal_confirmation" string="Reject By Procurement" type="object"-->
+<!--                        groups="ng_internal_requisition.ng_internal_requisition_procurement"-->
+<!--                        context="{'approved': False}"-->
+<!--                        invisible="not state == 'audit'"/>-->
+
+<!--                &lt;!&ndash; Statusbar &ndash;&gt;-->
+<!--                <field name="state" widget="statusbar"-->
+<!--                       statusbar_visible="draft,submit,approved,audit,done"/>-->
+<!--            </header>-->
+
+<!--            <sheet>-->
+<!--                <group>-->
+<!--                    <group>-->
+<!--                        <field name="name" readonly="True"/>-->
+<!--                        <field name="requester" required="True" readonly="True"/>-->
+<!--                        <field name="request_date" required="True" readonly="True"/>-->
+<!--                        <field name="request_deadline"/>-->
+<!--                        <field name="warehouse_id" required="state == 'warehouse'"/>-->
+<!--                        <field name="company_id" invisible="True"/>-->
+<!--                    </group>-->
+<!--                    <group>-->
+<!--                        <field name="end_user" readonly="True"/>-->
+<!--                        <field name="hod" readonly="state != 'draft'"/>-->
+<!--                        <field name="department" readonly="True"/>-->
+<!--                    </group>-->
+<!--                    <group>-->
+<!--                        <field name="purchase_agreement_id" invisible="not is_purchase_agreement"/>-->
+<!--                        <field name="is_purchase_agreement" invisible="True"/>-->
+<!--                    </group>-->
+<!--                </group>-->
+
+<!--                <notebook>-->
+<!--                    &lt;!&ndash; Rejection Reason &ndash;&gt;-->
+<!--                    <page string="Rejection Reason" invisible="reason == False">-->
+<!--                        <field name="reason" readonly="True"/>-->
+<!--                    </page>-->
+
+<!--                    &lt;!&ndash; Requisition Lines &ndash;&gt;-->
+<!--                    <page string="Requisition">-->
+<!--                        <field name="approve_request_ids">-->
+<!--                            <list editable="bottom">-->
+<!--                                <field name="product_id" required="1" readonly="parent_state in ['submit','approved','cpo','done']"/>-->
+<!--                                <field name="quantity" required="1" readonly="parent_state in ['submit','approved','cpo','done']"/>-->
+<!--                                <field name="uom" readonly="parent_state in ['submit','approved','cpo','done']"/>-->
+<!--                                <field name="purchase_agreement_id"/>-->
+<!--                            </list>-->
+<!--                        </field>-->
+
+<!--                    </page>-->
+<!--                </notebook>-->
+<!--            </sheet>-->
+
+<!--            <chatter/>-->
+<!--        </form>-->
+<!--    </field>-->
+<!--</record>-->
+
+
+<!--        &lt;!&ndash; actions opening views on models &ndash;&gt;-->
+<!--        <record model="ir.actions.act_window" id="ng_internal_requisition_action_window">-->
+<!--            <field name="name">Purchase Requisition</field>-->
+<!--            <field name="res_model">ng.ir.request</field>-->
+<!--            <field name="view_mode">list,form</field>-->
+<!--            <field name="context">{'default_request_type': 'purchase'}</field>-->
+<!--            <field name="domain">[('request_type', '=', 'purchase')]</field>-->
+<!--            <field name="help" type="html">-->
+<!--                <p class="oe_view_nocontent_create">-->
+<!--                </p>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <menuitem name="Purchase Requisition"-->
+<!--                  id="purcahse_requisition_menu"-->
+<!--                  web_icon="ng_internal_requisition,static/description/icon.png"-->
+<!--                  action="ng_internal_requisition_action_window" />-->
+
+<!--    </data>-->
+<!--</odoo>-->

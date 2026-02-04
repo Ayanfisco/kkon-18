@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_fob_deferred_revenue,eservice_api.fob.deferred.revenue,model_fob_deferred_revenue,base.group_user,1,1,1,1
+access_fob_deferred_revenue_line,eservice_api.fob.deferred.revenue.line,model_fob_deferred_revenue_line,base.group_user,1,1,1,1
+access_fob_invoice_line,eservice_api.fob.invoice.line,model_fob_invoice_line,base.group_user,1,1,1,1
+access_invoice_make_deferred,eservice_api.invoice.make.deferred,model_invoice_make_deferred,base.group_user,1,1,1,1

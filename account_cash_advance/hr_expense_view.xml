@@ -1,0 +1,221 @@
+<odoo>
+    <data>
+
+        <record id="employee_expense_form" model="ir.ui.view">
+            <field name="name">emp.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="Allowed Accounts in expense">
+                            <field name="account_ids" nolabel="1"/>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="employee_categ_form_exp" model="ir.ui.view">
+            <field name="name">employee.form.expense</field>
+            <field name="model">hr.employee.category</field>
+            <field name="inherit_id" ref="hr.view_employee_category_form" />
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='name']" position="after">
+                        <separator string="Allowed Accounts in expense" />
+                        <field name="account_ids" nolabel="1" />
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+
+        <record id="ret_view_expenses_line_tree" model="ir.ui.view">
+            <field name="name">ret.expense.line.tree</field>
+            <field name="model">ret.expense.line</field>
+            <field name="arch" type="xml">
+                <list string="Expense Retirement Lines">
+                    <field name="sequence" invisible="1" />
+                    <field name="date_value" />
+                    <field name="name" />
+                    <field name="account_id" />
+                    <field name="ref" />
+                    <field  name="analytic_account" groups="analytic.group_analytic_accounting" />
+                    <field name="unit_amount" />
+                    <field name="unit_quantity" />
+                    <field name="total_amount" sum="Total" />
+                </list>
+            </field>
+        </record>
+
+        <record id="view_expenses_tree_ret" model="ir.ui.view">
+            <field name="name">ret.expense.tree</field>
+            <field name="model">ret.expense</field>
+            <field name="arch" type="xml">
+                <list string="Retirement Expenses">
+                    <field name="employee_id" />
+                    <field name="date" />
+                    <field name="user_id" invisible="1" />
+                    <field name="name" />
+                    <field name="currency_id" />
+                    <field name="journal_id" invisible="1" />
+                    <field name="employee_account" invisible="1" />
+                    <field name="department_id" invisible="1" />
+                    <field name="amount" />
+                    <field name="state" />
+                    <button name="confirm" />
+                    <button name="refuse" string="Refuse" groups="hr.group_hr_user" />
+                </list>
+            </field>
+        </record>
+
+
+
+        <record id="view_editable_expenses_tree_ret" model="ir.ui.view">
+            <field name="name">ret.expense.tree</field>
+            <field name="model">ret.expense</field>
+            <field name="arch" type="xml">
+                <list string="Retirement Expenses">
+                    <field name="employee_id" />
+                    <field name="date" />
+                    <field name="journal_id" invisible="1" />
+                    <field name="employee_account" invisible="1" />
+                    <field name="department_id" invisible="1" />
+                    <field name="ref" />
+                    <field name="name" />
+                    <field name="amount" />
+                    <field name="state" />
+                    <button name="confirm" readonly="state != 'draft'" string="Confirm" />
+                    <button name="refuse" string="Refuse" groups="hr.group_hr_user" />
+                </list>
+            </field>
+        </record>
+
+        <record id="view_expenses_form_ret" model="ir.ui.view">
+            <field name="name">hr.expense.form.ret</field>
+            <field name="model">ret.expense</field>
+            <field name="arch" type="xml">
+                <form string="Retirement Expenses Sheet">
+                    <header>
+                        <button name="validate" readonly="state != 'draft'" string="Confirm" type="object" class="oe_highlight" />
+                        <button name="approve" invisible="state != 'open'" string="Approve" type="object" class="oe_highlight" groups="hr.group_hr_user, account_cash_advance.advance_manager" />
+                        <button name="set_to_draft" invisible="state != 'reject'" string="Set to Draft" groups="hr.group_hr_user, account_cash_advance.advance_manager" type="object" />
+                        <button name="set_to_close" invisible="state != 'open'" string="Reject" type="object" groups="hr.group_hr_user, account_cash_advance.advance_manager" />
+                        <button name="create_move" string="Create Journal Entry" invisible="state != 'approve'" type="object" class="oe_highlight" groups="account.group_account_user" />
+                        <button name="set_to_close_paid" invisible="state != 'approve'" string="Reject" type="object" groups="account.group_account_user" />
+                        <button name="set_to_draft_app" invisible="state != 'cancel'" string="Set to Draft" type="object" groups="hr.group_hr_user, account_cash_advance.advance_manager" />
+                        <button name="set_to_cancel" readonly="state != 'draft'" string="Cancel" groups="hr.group_hr_user, account_cash_advance.advance_manager" type="object" />
+                        <field name="state" readonly="1" widget="statusbar" />
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" />
+                            <h1>
+                                <field name="name" />
+                            </h1>
+                            <label for="employee_id" class="oe_edit_only" />
+                            <h2>
+                                <field name="employee_id" on_change="onchange_employee_id(employee_id, currency_id,date)" />
+                            </h2>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="ref" />
+                                <field name="date" />
+                                <field name="currency_id" on_change="onchange_employee_id(employee_id, currency_id,date)" />
+                                <field name="department_id" />
+                                <field name="company_id" groups="base.group_multi_company" />
+                            </group>
+                            <notebook>
+                                <page string="Description">
+                                    <newline />
+                                    <field  name="line_ids" nolabel="1" >
+                                        <form string="Retirement Expenses Lines">
+                                            <group>
+                                                <group>
+                                                    <field name="product_id" on_change="onchange_product_id(product_id, uom_id, parent.employee_id)" />
+                                                    <field name="name" />
+                                                    <field name="account_id" on_change="onchange_account(account_id, parent.employee_id)" />
+                                                </group>
+                                                <group>
+                                                    <field name="unit_amount" />
+                                                    <field name="unit_quantity" />
+                                                    <field name="uom_id" on_change="onchange_product_id(product_id, uom_id, parent.employee_id)" />
+                                                </group>
+                                            </group>
+                                            <group groups="analytic.group_analytic_accounting">
+                                                <separator string="Customer Project"  />
+<!--                                                <field name="analytic_account" />-->
+                                            </group>
+                                            <group>
+                                                <separator string="References" />
+                                                <field name="date_value" />
+                                                <field name="ref" />
+                                            </group>
+                                        </form>
+                                    </field>
+                                </page>
+                                <page string="Reconcile Lines">
+                                    <field name="rec_line_ids" nolabel="1">
+                                        <list string="Reconcile Lines" editable="bottom">
+                                            <field name="ret_id" />
+                                            <field name="approval_date" />
+                                            <field name="org_amount" />
+                                            <field name="open_amount" />
+                                            <field name="allocate_amount" />
+                                        </list>
+                                    </field>
+                                </page>
+                                <page string="Other Info"
+                                    groups="account.group_account_user, hr.group_hr_user">
+                                    <group>
+                                        <separator  string="Accounting data" />
+                                        <field name="journal_id"
+                                             />
+                                        <field name="employee_account"
+                                             />
+                                        <field name="move_id1" />
+                                    </group>
+                                    <group>
+                                        <separator string="Validation" />
+                                        <field name="date_confirm" readonly="1" />
+                                        <field name="date_valid" readonly="1" />
+                                        <field name="user_valid" />
+                                    </group>
+                                    <separator string="Notes" />
+                                    <field name="note" nolabel="1" />
+                                </page>
+                            </notebook>
+                        </group>
+                    </sheet>
+                    <chatter/>
+<!--                    <div class="oe_chatter">-->
+<!--                        <field name="message_follower_ids" widget="mail_followers" />-->
+<!--                        <field name="message_ids" widget="mail_thread" />-->
+<!--                    </div>-->
+                </form>
+            </field>
+        </record>
+
+        <record id="expense_all_ret" model="ir.actions.act_window">
+            <field name="name">Expense Retirement</field>
+            <field name="res_model">ret.expense</field>
+<!--            <field name="view_id" ref="view_expenses_tree_ret" />-->
+        </record>
+
+        <menuitem id="next_id_49" name="Expenses" sequence="0" parent="hr.menu_hr_root"/>
+        <menuitem action="expense_all_ret" id="menu_expense_all_ret" sequence="4000000" name="Expense Retirement" parent="menu_open_salary_cash_advance_child" />
+
+        <record model="ir.actions.act_window" id="action_account_expense_advance_paid">
+            <field name="name">Expenses to Journal</field>
+            <field name="res_model">ret.expense</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_finance_exp_advance_salary_main" name="Staff Expenses" parent="account_accountant.menu_account_group" sequence="4" />
+
+        <menuitem action="expense_all_ret" id="menu_expense_all_ret00" name="Expense Retirements" parent="menu_finance_exp_advance_salary_main" />
+
+        <menuitem id="menu_finance_exp_advance_salary" action="action_account_expense_advance_paid" parent="menu_finance_exp_advance_salary_main" sequence="1000" />
+
+    </data>
+</odoo>

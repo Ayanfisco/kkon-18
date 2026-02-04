@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="ir_cron_generate_15_days_ahead_invoices" model="ir.cron">
+            <field name="name">Generate Recurring Invoices</field>
+            <field name="model_id" ref="model_contract_contract"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_generate_invoices()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+        </record>        
+
+        <record id="ir_cron_update_contract_status" model="ir.cron">
+            <field name="name">Update Service Status From Invoices</field>
+            <field name="model_id" ref="model_contract_contract"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_update_contract_status()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+        </record>
+
+        <record id="ir_cron_send_reminders" model="ir.cron">
+            <field name="name">Send Invoice Reminders and Overdue Notices</field>
+            <field name="model_id" ref="model_contract_contract"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_send_reminders()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+        </record>
+
+    </data>
+</odoo>

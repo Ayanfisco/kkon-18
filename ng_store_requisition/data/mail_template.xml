@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+		<record id="mail_activity_data_sr" model="mail.activity.type">
+			<field name="name">Store Requisition</field>
+			<field name="icon">fa-tasks</field>
+			<field name="delay_count">5</field>
+			<field name="sequence">12</field>
+		</record>
+
+		<record id="ng_store_requisition_reject" model="mail.template">
+			<field name="name" >Store Requisition Rejection Email</field>
+			<field name="email_from">{{user.company_id.email}}</field>
+			<!--			<field name="reply_to">${user.partner_id.email}</field>-->
+			<field name="subject">A Store Requisition Rejection from </field>
+			<field name="email_to">{{object.requester.partner_id.email}}</field>
+			<field name="model_id"   model="ir.model"  search="[('model', '=', 'ng.store.request')]" />
+			<!--		    <field name="auto_delete" eval="True"/>-->
+			<field name="body_html" type="html">
+
+				<p>Dear <t t-out="object.requester.partner_id.name"/>,</p>
+				<p> <t t-out="ctx.get('rejecter_name')"/> has been Rejected your Request.</p>
+				<p> Reason : <t t-out="ctx.get('reason')"/> </p>
+				<p>Regards and Thanks</p>
+				<p>System auto generated email</p>
+
+			</field>
+		</record>
+
+	</data>
+</odoo>

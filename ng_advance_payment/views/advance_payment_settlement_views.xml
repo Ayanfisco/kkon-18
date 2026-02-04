@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+        <record id="view_tree_advance_payment_settlement" model="ir.ui.view">
+            <field name="name">view.tree.advance.payment.settlement</field>
+            <field name="model">advance.payment.settlement</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="partner_id" />
+                    <field name="amount" />
+                    <field name="currency_id" />
+                    <field name="journal_id" />
+                    <field name="date" />
+                    <field name="user_id" />
+                    <field name="state" />
+                </list>
+            </field>
+        </record>
+
+        <record id="view_form_advance_payment_settlement" model="ir.ui.view">
+            <field name="name">view.form.advance.payment.settlement</field>
+            <field name="model">advance.payment.settlement</field>
+            <field name="arch" type="xml">
+                <form string="Advance Payment Settlement">
+                    <header>
+                        <button string="Submit" name="validate" type="object" invisible="state != 'draft'" class="oe_highlight" />
+                        <button name="action_post" string="Post" class="oe_highlight" type="object" icon="fa-bars" />
+                        <button string="Approve" name="approve" type="object" invisible="state != 'open'" class="oe_highlight" />
+                        <field name="state" widget="statusbar" readonly="1" />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_move" type="object" class="oe_stat_button" icon="fa-bars">
+                                <div class="o_stat_info">
+                                    <span class="o_stat_text">Journal Entry</span>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="partner_id" />
+                                <label for="amount" />
+                                <div class="o_row">
+                                    <field name="amount" />
+                                    <field name="currency_id" />
+                                </div>
+                                <field name="journal_id" />
+                            </group>
+                            <group>
+                                <field name="date" />
+                                <field name="user_id" readonly="1" />
+                            </group>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="advance_payment_settlement_view_search" model="ir.ui.view">
+            <field name="name">advance.payment.settlement.view.search</field>
+            <field name="model">advance.payment.settlement</field>
+            <field name="arch" type="xml">
+                <search string="Advance Payment Settlement">
+                    <field name="partner_id" />
+                    <field name="amount" />
+                    <field name="date" />
+                    <field name="user_id" />
+                </search>
+            </field>
+        </record>
+
+        <record id="advance_payment_settlement_action" model="ir.actions.act_window">
+            <field name="name">Advance Payment Settlement</field>
+            <field name="res_model">advance.payment.settlement</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_create">
+                    Click to create a new settlement.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="advance_payment_settlement_menu"
+                  name="Advance Settlement"
+                  action="advance_payment_settlement_action"
+                  parent="account.menu_finance_receivables"
+                  sequence="14" />
+
+    </data>
+
+</odoo>
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<odoo>-->
+
+<!--    <data>-->
+
+<!--        <record id="view_tree_advance_payment_settlement" model="ir.ui.view">-->
+<!--            <field name="name">view.tree.advance.payment.settlement</field>-->
+<!--            <field name="model">advance.payment.settlement</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <list>-->
+<!--                    <field name="partner_id" />-->
+<!--                    <field name="amount" />-->
+<!--                    <field name="currency_id" />-->
+<!--                    <field name="journal_id" />-->
+<!--                    <field name="date" />-->
+<!--                    <field name="user_id" />-->
+<!--                    <field name="state" />-->
+<!--                </list>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="view_form_advance_payment_settlement" model="ir.ui.view">-->
+<!--            <field name="name">view.form.advance.payment.settlement</field>-->
+<!--            <field name="model">advance.payment.settlement</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <form string="Advance Payment Settlement">-->
+<!--                    <header>-->
+<!--                        <button string="Submit" name="validate" type="object" states="draft" class="oe_highlight" />-->
+<!--                        <button name="action_post" string="Post" class="oe_highlight" type="object" icon="fa-bars" />-->
+<!--                        <button string="Approve" name="approve" type="object" states="open" class="oe_highlight" />-->
+<!--                        <field name="state" widget="statusbar" readonly="True" />-->
+<!--                    </header>-->
+<!--                    <sheet>-->
+<!--                        <div class="oe_button_box" name="button_box">-->
+<!--                            <button name="action_view_move" type="object" class="oe_stat_button" icon="fa-bars">-->
+<!--                                <div class="o_stat_info">-->
+<!--                                    <span class="o_stat_text">Journal Entry</span>-->
+<!--                                </div>-->
+<!--                            </button>-->
+<!--                        </div>-->
+<!--                        <div class="oe_title">-->
+<!--                            <h1>-->
+<!--                                <field name="name" readonly="1"/>-->
+<!--                            </h1>-->
+<!--                        </div>-->
+<!--                        <group>-->
+<!--                            <group>-->
+<!--                                <field name="partner_id" />-->
+<!--                                <label for="amount" />-->
+<!--                                <div class="o_row">-->
+<!--                                    <field name="amount" />-->
+<!--                                    <field name="currency_id" />-->
+<!--                                </div>-->
+<!--                                <field name="journal_id" />-->
+<!--                            </group>-->
+<!--                            <group>-->
+<!--                                <field name="date" />-->
+<!--                                <field name="user_id" readonly="1" />-->
+<!--                            </group>-->
+<!--                        </group>-->
+<!--                    </sheet>-->
+<!--                    <chatter/>-->
+<!--&lt;!&ndash;                    <div class="oe_chatter">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <field name="message_follower_ids" groups="base.group_user" />&ndash;&gt;-->
+<!--&lt;!&ndash;                        <field name="activity_ids" />&ndash;&gt;-->
+<!--&lt;!&ndash;                        <field name="message_ids" />&ndash;&gt;-->
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--                </form>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="advance_payment_settlement_view_search" model="ir.ui.view">-->
+<!--            <field name="name">advance.payment.settlement.view.search</field>-->
+<!--            <field name="model">advance.payment.settlement</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <search string="Advance Payment Settlement">-->
+<!--                    <field name="partner_id" />-->
+<!--                    <field name="amount" />-->
+<!--                    <field name="date" />-->
+<!--                    <field name="user_id" />-->
+<!--                </search>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="advance_payment_settlement_action" model="ir.actions.act_window">-->
+<!--            <field name="name">Advance Payment Settlement</field>-->
+<!--            <field name="res_model">advance.payment.settlement</field>-->
+<!--            <field name="view_mode">list,form</field>-->
+<!--            <field name="domain">[]</field>-->
+<!--            <field name="context">{}</field>-->
+<!--            <field name="help" type="html">-->
+<!--                <p class="oe_no_content_create">Create a new settlement</p>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <menuitem id="advance_payment_settlement_menu" name="Advance Settlement" action="advance_payment_settlement_action" parent="account.menu_finance_receivables" sequence="14" />-->
+
+<!--    </data>-->
+
+<!--</odoo>-->

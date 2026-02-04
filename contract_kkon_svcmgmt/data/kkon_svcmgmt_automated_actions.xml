@@ -1,0 +1,87 @@
+<!--<odoo>-->
+<!--    <data>-->
+<!--&lt;!&ndash;        <record id="action_invoice_payment_confirmation" model="base.automation">&ndash;&gt;-->
+<!--&lt;!&ndash;            <field name="name">Payment Confirmation Email</field>&ndash;&gt;-->
+<!--&lt;!&ndash;            <field name="model_id" ref="account.model_account_move"/>&ndash;&gt;-->
+<!--&lt;!&ndash;            <field name="trigger">on_write</field>&ndash;&gt;-->
+<!--&lt;!&ndash;            <field name="filter_pre_domain">[('payment_state', '!=', 'paid')]</field>&ndash;&gt;-->
+<!--&lt;!&ndash;            <field name="filter_domain">[('state', '=', 'posted'), ('payment_state', '=', 'paid')]</field>&ndash;&gt;-->
+<!--&lt;!&ndash;            <field name="active" eval="True"/>&ndash;&gt;-->
+<!--&lt;!&ndash;            <field name="state">code</field>&ndash;&gt;-->
+<!--&lt;!&ndash;            <field name="code">&ndash;&gt;-->
+<!--&lt;!&ndash;                <![CDATA[&ndash;&gt;-->
+<!--&lt;!&ndash;email_notifications = env['ir.config_parameter'].sudo().get_param('contract_kkon_svcmgmt.email_notifications')&ndash;&gt;-->
+<!--&lt;!&ndash;if email_notifications:&ndash;&gt;-->
+<!--&lt;!&ndash;    template_id = env.ref('contract_kkon_svcmgmt.payment_confirmation_email').id&ndash;&gt;-->
+<!--&lt;!&ndash;    env['mail.template'].browse(template_id).send_mail(record.id, force_send=True)&ndash;&gt;-->
+<!--&lt;!&ndash;                ]]>&ndash;&gt;-->
+<!--&lt;!&ndash;            </field>&ndash;&gt;-->
+<!--&lt;!&ndash;        </record>&ndash;&gt;-->
+<!--        <record id="action_contract_welcome" model="base.automation">-->
+<!--            <field name="name">Welcome Email</field>-->
+<!--            <field name="model_id" ref="model_contract_contract"/>-->
+<!--            <field name="trigger">on_create</field>-->
+<!--            <field name="active" eval="True"/>-->
+<!--            <field name="state">code</field>-->
+<!--            <field name="code">-->
+<!--                <![CDATA[-->
+<!--email_notifications = env['ir.config_parameter'].sudo().get_param('contract_kkon_svcmgmt.email_notifications')-->
+<!--if email_notifications:-->
+<!--    template_id = env.ref('contract_kkon_svcmgmt.welcome_email').id-->
+<!--    env['mail.template'].browse(template_id).send_mail(record.id, force_send=True)-->
+<!--                ]]>-->
+<!--            </field>-->
+<!--        </record>-->
+<!--        <record id="action_service_activation" model="base.automation">-->
+<!--            <field name="name">Service Activation Email</field>-->
+<!--            <field name="model_id" ref="model_contract_contract"/>-->
+<!--            <field name="trigger">on_write</field>-->
+<!--            <field name="filter_domain">[('enabled', '=', True)]</field>-->
+<!--            <field name="active" eval="True"/>-->
+<!--            <field name="state">code</field>-->
+<!--            <field name="code">-->
+<!--                <![CDATA[-->
+<!--email_notifications = env['ir.config_parameter'].sudo().get_param('contract_kkon_svcmgmt.email_notifications')-->
+<!--if email_notifications:-->
+<!--    template_id = env.ref('contract_kkon_svcmgmt.service_activation_email').id-->
+<!--    env['mail.template'].browse(template_id).send_mail(record.id, force_send=True)-->
+<!--                ]]>-->
+<!--            </field>-->
+<!--        </record>-->
+<!--        <record id="action_account_suspension" model="base.automation">-->
+<!--            <field name="name">Account Suspension Email</field>-->
+<!--            <field name="model_id" ref="model_contract_contract"/>-->
+<!--            <field name="trigger">on_write</field>-->
+<!--            <field name="filter_pre_domain">[('enabled', '=', True)]</field>-->
+<!--            <field name="filter_domain">[('enabled', '=', False)]</field>-->
+<!--            <field name="active" eval="True"/>-->
+<!--            <field name="state">code</field>-->
+<!--            <field name="code">-->
+<!--                <![CDATA[-->
+<!--email_notifications = env['ir.config_parameter'].sudo().get_param('contract_kkon_svcmgmt.email_notifications')-->
+<!--if email_notifications:-->
+<!--    template_id = env.ref('contract_kkon_svcmgmt.account_suspension_email').id-->
+<!--    env['mail.template'].browse(template_id).send_mail(record.id, force_send=True)-->
+<!--                ]]>-->
+<!--            </field>-->
+<!--        </record>-->
+<!--        <record id="action_service_termination" model="base.automation">-->
+<!--            <field name="name">Service Termination Email</field>-->
+<!--            <field name="model_id" ref="model_contract_contract"/>-->
+<!--            <field name="trigger">on_unlink</field>-->
+<!--            <field name="active" eval="True"/>-->
+<!--            <field name="state">code</field>-->
+<!--            <field name="code">-->
+<!--                <![CDATA[-->
+<!--email_notifications = env['ir.config_parameter'].sudo().get_param('contract_kkon_svcmgmt.email_notifications')-->
+<!--if email_notifications:-->
+<!--    template_id = env.ref('contract_kkon_svcmgmt.service_termination_email').id-->
+<!--    env['mail.template'].browse(template_id).send_mail(record.id, force_send=True)-->
+<!--                ]]>-->
+<!--            </field>-->
+<!--        </record>-->
+<!--    </data>-->
+<!--</odoo>-->
+<odoo>
+
+</odoo>

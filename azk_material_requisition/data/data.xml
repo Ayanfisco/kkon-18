@@ -1,0 +1,22 @@
+<odoo noupdate="1">
+    <!-- Maretial Requisition Sequence -->
+    <record id="material_requisition_sequence" model="ir.sequence">
+        <field name="name">Material Requisition</field>
+        <field name="code">material.requisition.code</field>
+        <field name="prefix">MR</field>
+        <field name="padding">5</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="purchase_request_sequence" model="ir.sequence">
+        <field name="name">Purchase Request</field>
+        <field name="code">az.purchase.request.code</field>
+        <field name="prefix">PR</field>
+        <field name="padding">5</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_quant_tree_inherit_custom" model="ir.ui.view">
+        <field name="name">stock.quant.list.inherit.custom</field>
+        <field name="model">stock.quant</field>
+        <field name="inherit_id" ref="stock.view_stock_quant_tree_editable"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="editable"/>
+            </xpath>
+            <!-- Add Unit Cost and Total Value after lot_id -->
+            <xpath expr="//field[@name='lot_id']" position="after">
+                <field name="unit_cost" string="Unit Cost" widget="monetary"/>
+                <field name="total_value" string="Total Value" sum="Total Stock Value" widget="monetary"/>
+            </xpath>
+            
+            <!-- Add additional fields after quantity -->
+            <xpath expr="//field[@name='reserved_quantity']" position="after">
+                <field name="incoming_qty" string="Incoming"/>
+                <field name="outgoing_qty" string="Outgoing"/>
+                <field name="free_qty" string="Free Quantity"/>
+                <field name="unit" string="Unit"/>
+            </xpath>
+            
+            <!-- Add Forecast button at the end after company_id -->
+            <xpath expr="//button[@name='action_view_orderpoints']" position="after">
+                <button name="action_product_forecast_report" string="Forecast" type="object" class="btn-link" icon="fa-area-chart"/>
+            </xpath>
+        </field>
+    </record>
+</odoo> 

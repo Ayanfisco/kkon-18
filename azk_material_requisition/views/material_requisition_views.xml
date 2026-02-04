@@ -1,0 +1,136 @@
+<odoo>
+    <!-- Material Requisition Form view -->
+    <record id="material_requisition_form_view" model="ir.ui.view">
+        <field name="name">material.requisition.form.view</field>
+        <field name="model">material.requisition</field>
+        <field name="arch" type="xml">
+            <form name="material_requisition_form">
+                <header>
+                    <button name="action_open_import_wizard" type="object" 
+                        string="Import Material Items" class="oe_highlight" invisible="state not in ('new', 'sent')"/>
+                    <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_view_material_lines" help="List Of Materials" class="oe_stat_button" icon="fa-cubes" invisible="state not in ('new', 'sent')">
+                            <field name="lines_count" widget="statinfo" string="Materials"/>
+                        </button>
+                        <button type="object" name="action_view_transfers" class="oe_stat_button" icon="fa-truck" invisible="transfer_count == 0">
+                            <field name="transfer_count" widget="statinfo" string="Transfers"/>
+                        </button>
+                        <button type="object" name="action_view_purchase_requests" class="oe_stat_button" icon="fa-list-alt" invisible="purchase_request_count == 0">
+                            <field name="purchase_request_count" widget="statinfo" string="Purchase Requests"/>
+                        </button>
+                        <button type="object" name="action_view_purchase_orders" class="oe_stat_button" icon="fa-credit-card" invisible="purchase_order_count == 0">
+                            <field name="purchase_order_count" widget="statinfo" string="Purchase Orders"/>
+                        </button>
+                        <button type="object" name="action_view_purchase_agreements" class="oe_stat_button" icon="fa-list-alt" invisible="purchase_agreement_count == 0">
+                            <field name="purchase_agreement_count" widget="statinfo" string="Purchase Agreements"/>
+                        </button>
+                        <button type="object" name="action_view_vendor_bills" class="oe_stat_button" icon="fa-pencil-square-o" invisible="bills_count == 0">
+                            <field name="bills_count" widget="statinfo" string="Vendor Bills"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1 class="d-flex">
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group name="general_info">
+                            <field name="project_id"/>
+                            <field name="destination_location_id"/>
+                            <field name="company_id"/>
+                        </group>
+                        <group name="more_info">
+                            <field name="task_id" domain="['|',('project_id', '=', project_id), ('project_id', '=', False)]"/>
+                            <field name="analytic_account_id" string="Cost Centers"/>
+                            <field name="can_edit_locations" invisible="1"/>
+                            <field name="location_ids" widget="many2many_tags" readonly="not can_edit_locations"/>
+                        </group>
+                    </group>
+                    <notebook id="requisition_lines">
+                        <page string="Requisition Lines" name="requisition_lines">
+                            <field name="line_ids" nolable="1" readonly="state not in ('new', 'sent')">
+                                <list name="mrl_tree" editable="bottom">
+                                    <field name="product_template_id" string="Product"/>
+                                    <field name="product_id" optional="hide"/>
+                                    <field name="description"/>
+                                    <field name="requested_qty"/>
+                                    <field name="product_uom_category_id" invisible="1"/>
+                                    <field name="product_uom_id" domain="[('category_id', '=', product_uom_category_id)]"/>
+                                    <field name="scheduled_qty"/>
+                                    <field name="received_qty"/>
+                                    <field name="remaining_qty"/>
+                                    <field name="stock_qty" optional="show"/>
+                                </list>
+                                <form name="mrl_form">
+                                    <group>
+                                        <field name="product_template_id" string="Product"/>
+                                        <field name="description"/>
+                                        <field name="requested_qty"/>
+                                        <field name="scheduled_qty"/>
+                                        <field name="received_qty"/>
+                                        <field name="remaining_qty"/>
+                                        <field name="stock_qty"/>
+                                        <field name="product_uom_id"/>
+                                    </group>
+                                    <br/>
+                                    <field name="purchase_order_ids" nolabel="1"/>
+                                    <field name="purchase_agreement_ids" nolabel="1"/>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+<!--                <div class="oe_chatter">-->
+<!--                    <field name="message_follower_ids"/>-->
+<!--                    <field name="activity_ids"/>-->
+<!--                    <field name="message_ids"/>-->
+<!--                </div>-->
+            </form>
+        </field>
+    </record>
+
+    <!-- Material Requisition Tree view -->
+    <record id="material_requisition_tree_view" model="ir.ui.view">
+        <field name="name">material.requisition.tree.view</field>
+        <field name="model">material.requisition</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="task_id" optional="show"/>
+                <field name="state"/>
+                <field name="company_id" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="material_requisition_search_view" model="ir.ui.view">
+        <field name="name">material.requisition.search.view</field>
+        <field name="model">material.requisition</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="project_id"/>
+                <field name="task_id"/>
+                <field name="analytic_account_id"/>
+                <separator/>
+                <filter string="New" name="scheduled_items" domain="[('state','=', 'new')]"/>
+                <filter string="Sent" name="scheduled_items" domain="[('state','=', 'sent')]"/>
+                <filter string="In Progress" name="scheduled_items" domain="[('state','=', 'in_progress')]"/>
+                <filter string="Done" name="scheduled_items" domain="[('state','=', 'done')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="project_id" domain="[]" context="{'group_by':'state'}"/>
+                    <filter string="Project" name="project_id" domain="[]" context="{'group_by':'project_id'}"/>
+                    <filter string="Destination Location" name="project_id" domain="[]" context="{'group_by':'destination_location_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>
+
+
+
+

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="ng_ir_store_requisition_seq" model="ir.sequence">
+            <field name="name">Store Requisition</field>
+            <field name="code">ng.store.request</field>
+            <field name="prefix">SR/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

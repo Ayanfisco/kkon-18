@@ -1,0 +1,105 @@
+<odoo>
+    <!-- Purchase Requests Window Action -->
+    <record id="purchase_request_action" model="ir.actions.act_window">
+        <field name="name">Purchase Requests</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">az.purchase.request</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'create': False}</field>
+    </record>
+
+    <!-- Purchase Request Form view -->
+    <record id="purchase_request_from_view" model="ir.ui.view">
+        <field name="name">az.purchase.request.form.view</field>
+        <field name="model">az.purchase.request</field>
+        <field name="arch" type="xml">
+            <form name="purchase_request_form">
+                <header>
+                    <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_view_purchase_orders" class="oe_stat_button" icon="fa-credit-card" invisible="purchase_order_count == 0">
+                            <field name="purchase_order_count" widget="statinfo" string="Purchase Orders"/>
+                        </button>
+                        <button type="object" name="action_view_purchase_agreements" class="oe_stat_button" icon="fa-list-alt" invisible="purchase_agreement_count == 0">
+                            <field name="purchase_agreement_count" widget="statinfo" string="Purchase Agreements"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1 class="d-flex">
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group name="general_info">
+                            <field name="material_requisition_id"/>
+                            <field name="destination_location_id"/>
+                        </group>
+                        <group name="more_info">
+                            <field name="mr_state"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+                    <notebook id="request_lines">
+                        <page string="Purchase Request Lines" name="request_lines">
+                            <field name="line_ids" nolable="1">
+                                <list name="pr_lines" editable="bottom">
+                                    <field name="product_id" string="Product"/>
+                                    <field name="description"/>
+                                    <field name="quantity"/>
+                                    <field name="uom_id"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                 <chatter/>
+<!--                <div class="oe_chatter">-->
+<!--                    <field name="message_follower_ids"/>-->
+<!--                    <field name="activity_ids"/>-->
+<!--                    <field name="message_ids"/>-->
+<!--                </div>-->
+            </form>
+        </field>
+    </record>
+
+    <!-- Purchase Request Tree view -->
+    <record id="purchase_request_tree_view" model="ir.ui.view">
+        <field name="name">purchase.request.tree.view</field>
+        <field name="model">az.purchase.request</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="state"/>
+                <field name="company_id" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Server Action in Purchase Request view: Create Purchase Order(s) -->
+    <record id="action_create_purchase_order_from_pr" model="ir.actions.server">
+        <field name="name">Create Purchase Order(s)</field>
+        <field name="model_id" ref="model_az_purchase_request"/>
+        <field name="binding_model_id" ref="model_az_purchase_request"/>
+        <field name="binding_view_types">form</field>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                action = records.create_purchase_order()
+        </field>
+    </record>
+
+    <!-- Server Action in Material Lines view: Create Purchase Agreement -->
+    <record id="action_create_purchase_agreement_from_pr" model="ir.actions.server">
+        <field name="name">Create Purchase Agreement</field>
+        <field name="model_id" ref="model_az_purchase_request"/>
+        <field name="binding_model_id" ref="model_az_purchase_request"/>
+        <field name="binding_view_types">form</field>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                action = records.create_purchase_agreement()
+        </field>
+    </record>
+</odoo>

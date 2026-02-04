@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+        <record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="account.res_config_settings_view_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="inside">
+                    <h2>Advance Payment Settlement</h2>
+                    <div class="row mt16 o_settings_container"
+                        name="advance_payment_settlement_setting_container">
+                        <div class="col-12 o_setting_box">
+                            <div class="o_setting_left_pane" />
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Journal</span>
+                                <span class="fa fa-lg fa-building-o"
+                                    title="Values set here are company-specific."
+                                    aria-label="Values set here are company-specific."
+                                    groups="base.group_multi_company" role="img" />
+                                <div class="text-muted">
+                                    Sets the default journal for advance payment settlement
+                                </div>
+                                <div class="content-group">
+                                    <field name="default_journal_id"
+                                        options="{'no_open': True, 'no_create': True}" />
+
+                                </div>
+                                <span class="o_form_label">Advance Account</span>
+                                <span class="fa fa-lg fa-building-o"
+                                    title="Values set here are company-specific."
+                                    aria-label="Values set here are company-specific."
+                                    groups="base.group_multi_company" role="img" />
+                                <div class="text-muted">
+                                    Sets the default advance account to post advance payments into</div>
+                                <div class="content-group">
+                                    <field name="default_advance_account_id"
+                                        options="{'no_open': True, 'no_create': True}" />
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+
+</odoo>

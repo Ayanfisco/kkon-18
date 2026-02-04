@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Action for Stock Location Report -->
+    <record id="action_stock_location_report" model="ir.actions.act_window">
+        <field name="name">Stock Location Reports</field>
+        <field name="res_model">stock.location.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="stock_location_report_form_view"/>
+        <field name="target">current</field>
+        <field name="context">{'form_view_initial_mode': 'edit'}</field>
+    </record>
+
+    <!-- Menu item under Reports -->
+    <menuitem
+        id="menu_stock_location_reports"
+        name="Stock Location Reports"
+        parent="stock.menu_warehouse_report"
+        action="action_stock_location_report"
+        sequence="20"/>
+</odoo>

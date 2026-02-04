@@ -1,0 +1,53 @@
+<odoo>
+    <!-- Material Requision Multi-company -->
+    <record id="material_requisition_multi_company" model="ir.rule">
+        <field name="name">Material Requisition Multi-company</field>
+        <field name="model_id" ref="model_material_requisition"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Material Requision Line Multi-company -->
+    <record id="material_requisition_line_multi_company" model="ir.rule">
+        <field name="name">Material Requisition Lines Multi-company</field>
+        <field name="model_id" ref="model_material_requisition_line"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Purchase Request Multi-company -->
+    <record id="purchase_request_multi_company" model="ir.rule">
+        <field name="name">Purchase Request Multi-company</field>
+        <field name="model_id" ref="model_az_purchase_request"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Purchase Request Lines Multi-company -->
+    <record id="purchase_request_line_multi_company" model="ir.rule">
+        <field name="name">Purchase Request Lines Multi-company</field>
+        <field name="model_id" ref="model_az_purchase_request_line"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Material Requision category -->
+    <record id="module_category_material_requisition" model="ir.module.category">
+        <field name="name">Material Requisition</field>
+        <field name="description">Allows you to manage your material requisitions.</field>
+    </record>
+
+    <record id="group_material_requisition_pm_engineer" model="res.groups">
+        <field name="name">Project Manager Engineer</field>
+        <field name="category_id" ref="module_category_material_requisition"/>
+    </record>
+
+    <record id="group_material_requisition_officer" model="res.groups">
+        <field name="name">Procurement Officer</field>
+        <field name="implied_ids" eval="[(4, ref('azk_material_requisition.group_material_requisition_pm_engineer'))]"/>
+        <field name="category_id" ref="module_category_material_requisition"/>
+    </record>
+
+    <record id="group_material_requisition_manager" model="res.groups">
+        <field name="name">Procurement Manager</field>
+        <field name="implied_ids" eval="[(4, ref('azk_material_requisition.group_material_requisition_officer'))]"/>
+        <field name="category_id" ref="module_category_material_requisition"/>
+    </record>
+
+</odoo>

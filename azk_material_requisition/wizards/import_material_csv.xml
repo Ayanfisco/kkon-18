@@ -1,0 +1,28 @@
+<odoo>
+    <record id="import_material_items_form_view" model="ir.ui.view">
+        <field name="name">import_material_items_form_view</field>
+        <field name="model">az.import.materila.csv</field>
+        <field name="arch" type="xml">
+            <form>
+            	<group>
+	                <group>
+	                    <field name="mr_id" invisible="1"/>
+	                    <field name="csv_file" widget="many2many_binary" options="{'no_create': True}"/>
+						
+	                </group>
+	                <group>
+	                	 <field name="file_lines_count"/>
+	                      <field name="created_lines_count"/>
+	                      <field name="updated_lines_count"/>
+	                      <field name="not_found_lines_count"/>
+	                </group>
+                </group>
+                <footer>
+                    <button name="import_csv_file" string="Import" type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                    <button name = "download_csv_template" string="Download Template" type="object"  class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,163 @@
+<odoo>
+    <!-- Material Requisition Line Form view -->
+    <record id="material_requisition_line_form_view" model="ir.ui.view">
+        <field name="name">material.requisition.line.form.view</field>
+        <field name="model">material.requisition.line</field>
+        <field name="arch" type="xml">
+            <form name="material_requisition_form" edit="0" create="0" delete="0">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_view_transfers" class="oe_stat_button" icon="fa-truck" invisible="transfer_count == 0">
+                            <field name="transfer_count" widget="statinfo" string="Transfers"/>
+                        </button>
+                        <button type="object" name="action_view_purchase_requests" class="oe_stat_button" icon="fa-list-alt" invisible="purchase_request_count == 0">
+                            <field name="purchase_request_count" widget="statinfo" string="Purchase Requests"/>
+                        </button>
+                        <button type="object" name="action_view_purchase_orders" class="oe_stat_button" icon="fa-credit-card" invisible="purchase_order_count == 0">
+                            <field name="purchase_order_count" widget="statinfo" string="Purchase Orders"/>
+                        </button>
+                        <button type="object" name="action_view_purchase_agreements" class="oe_stat_button" icon="fa-list-alt" invisible="purchase_agreement_count == 0">
+                            <field name="purchase_agreement_count" widget="statinfo" string="Purchase Agreements"/>
+                        </button>
+                        <button type="object" name="action_view_vendor_bills" class="oe_stat_button" icon="fa-pencil-square-o" invisible="bills_count == 0">
+                            <field name="bills_count" widget="statinfo" string="Vendor Bills"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group name="product_info">
+                            <field name="product_template_id"/>
+                            <field name="product_categ_id"/>
+                            <field name="product_uom_id"/>
+                            <field name="description"/>
+                        </group>
+                        <group name="quantities">
+                            <field name="requested_qty"/>
+                            <field name="scheduled_qty"/>
+                            <field name="received_qty"/>
+                            <field name="stock_qty"/>
+                            <field name="remaining_qty"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+<!--                <div class="oe_chatter">-->
+<!--                    <field name="message_follower_ids"/>-->
+<!--                    <field name="activity_ids"/>-->
+<!--                    <field name="message_ids"/>-->
+<!--                </div>-->
+            </form>
+        </field>
+    </record>
+
+    <!-- Material Requisition Line Tree view -->
+    <record id="material_requisition_line_tree_view" model="ir.ui.view">
+        <field name="name">material.requisition.line.tree.view</field>
+        <field name="model">material.requisition.line</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0">
+                <field name="requisition_id"/>
+                <field name="product_template_id"/>
+                <field name="description" optional="show"/>
+                <field name="product_categ_id" optional="show"/>
+                <field name="requested_qty"/>
+                <field name="scheduled_qty"/>
+                <field name="received_qty"/>
+                <field name="remaining_qty"/>
+                <field name="stock_qty"/>
+                <field name="product_uom_id"/>
+                <field name="purchase_order_ids" widget="many2many_tags" optional="show"/>
+                <field name="purchase_agreement_ids" widget="many2many_tags" optional="show"/>
+                <field name="picking_ids" widget="many2many_tags" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="material_requisition_line_search_view" model="ir.ui.view">
+        <field name="name">material.requisition.line.search.view</field>
+        <field name="model">material.requisition.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="product_template_id"/>
+                <field name="product_categ_id"/>
+                <field name="location_id" context="{'mrl_location': self}" filter_domain="[('stock_qty','&gt;', 0)]"/>
+                <separator/>
+                <filter string="Fully Scheduled" name="scheduled_items" domain="[('fulfilled','=', True)]"/>
+                <filter string="Not Scheduled" name="not_scheduled_items" domain="[('fulfilled','=', False)]"/>
+                <separator/>
+                <filter string="Done (Fully Received)" name="done" domain="[('fully_received','=', True)]"/>
+                <filter string="Not Fully Received" name="not_done" domain="[('fully_received','=', False)]"/>
+                <separator/>
+                <filter string="Available in Stock" name="available_in_stock" domain="[('stock_qty','&gt;', 0)]" context="{'available_in_stock': 1}"/>
+                <filter string="Not Available in Stock" name="not_available_in_stock" domain="[('stock_qty','=', 0)]" context="{'not_available_in_stock': 1}"/>
+                <separator/>
+                <filter string="PO Created" name="po_created" domain="[('purchase_order_ids','!=',False)]"/>
+                <filter string="Tender Created" name="tender_created" domain="[('purchase_agreement_ids','!=',False)]"/>
+                <filter string="No PO" name="no_po_created" domain="[('purchase_order_ids','=',False)]"/>
+                <filter string="No Tender" name="no_tender_created" domain="[('purchase_agreement_ids','=',False)]"/>
+                <filter string="Transfer Created" name="transfer_created" domain="[('picking_ids','!=',False)]"/>
+                <filter string="No Transfer Created" name="no_transfer_created" domain="[('picking_ids','=',False)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Product" name="product_tmpl" domain="[]" context="{'group_by':'product_template_id'}"/>
+                    <filter string="Product Category" name="model" domain="[]" context="{'group_by':'product_categ_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Server Action in Material Lines view: Create Transfer -->
+    <record id="action_create_transfer" model="ir.actions.server">
+        <field name="name">Create Transfer</field>
+        <field name="model_id" ref="model_material_requisition_line"/>
+        <field name="binding_model_id" ref="model_material_requisition_line"/>
+        <field name="binding_view_types">list</field>
+        <field name="groups_id" eval="[(4, ref('azk_material_requisition.group_material_requisition_officer'))]"/>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                action = records.create_transfer()
+        </field>
+    </record>
+
+    <!-- Server Action in Material Lines view: Create Purchase Request -->
+    <record id="action_create_purchase_request" model="ir.actions.server">
+        <field name="name">Create Purchase Request</field>
+        <field name="model_id" ref="model_material_requisition_line"/>
+        <field name="binding_model_id" ref="model_material_requisition_line"/>
+        <field name="binding_view_types">list</field>
+        <field name="groups_id" eval="[(4, ref('azk_material_requisition.group_material_requisition_officer'))]"/>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                action = records.create_purchase_request()
+        </field>
+    </record>
+
+    <!-- Server Action in Material Lines view: Create Purchase Order(s) -->
+    <record id="action_create_purchase_order" model="ir.actions.server">
+        <field name="name">Create Purchase Request</field>
+        <field name="model_id" ref="model_material_requisition_line"/>
+        <!--<field name="binding_model_id" ref="model_material_requisition_line"/>-->
+        <field name="binding_view_types">list</field>
+        <field name="groups_id" eval="[(4, ref('azk_material_requisition.group_material_requisition_officer'))]"/>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                action = records.create_purchase_order()
+        </field>
+    </record>
+
+    <!-- Server Action in Material Lines view: Create Tender -->
+    <record id="action_create_purchase_agreement" model="ir.actions.server">
+        <field name="name">Create Purchase Requisition</field>
+        <field name="model_id" ref="model_material_requisition_line"/>
+        <!--<field name="binding_model_id" ref="model_material_requisition_line"/>-->
+        <field name="binding_view_types">list</field>
+        <field name="groups_id" eval="[(4, ref('azk_material_requisition.group_material_requisition_officer'))]"/>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                action = records.create_purchase_agreement()
+        </field>
+    </record>
+</odoo>

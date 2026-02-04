@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem id="menu_cash_head" groups="base.group_user" name="Staff Advances" sequence="100"/>
+
+        <menuitem id="menu_cash_head_conf" groups="account_cash_advance.advance_manager" parent="menu_cash_head" name="Configuration" sequence="10000" />
+
+            <!-- Salary Advance Policy-->
+
+
+
+            <record id="view_policy_tree" model="ir.ui.view">
+                <field name="name">salary.advance.policy.tree</field>
+                <field name="model">salary.advance.policy</field>
+                <field name="arch" type="xml">
+                    <list string="Salary Advance policies">
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="method"/>
+                        <field name="policy_value"/>
+                        <field name="day"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name='state' invisible="True" />
+                    </list>
+                </field>
+            </record>
+
+            <record id="view_salary_advance_form" model="ir.ui.view">
+                <field name="name">policy.form</field>
+                <field name="model">salary.advance.policy</field>
+                <field name="arch" type="xml">
+                    <form string="Salary Advance Policies">
+                        <group>
+                            <field name="name" />
+                            <field name="code" /><newline/>
+                            <field name="method"/>
+                         </group>
+                         <group>
+                            <field name="policy_value" />
+                            <field name="day"/>
+                            <field name="company_id" groups="base.group_multi_company" />
+                            <field name='state' invisible="True" />
+                        </group>
+                        <group>
+                            <separator string="Employee Categories" />
+                            <field name="employee_categ_ids"  nolabel="1"/>
+                            <separator string="Employee's" />
+                            <field name="employee_ids" nolabel="1"/>
+                         </group>
+                      </form>
+                   </field>
+               </record>
+
+               <record id="action_salary_advance_policy" model="ir.actions.act_window">
+                    <field name="name">Salary Advance Policies</field>
+                    <field name="type">ir.actions.act_window</field>
+                    <field name="res_model">salary.advance.policy</field>
+                    <field name="view_mode">list,form</field>
+                </record>
+
+                <menuitem name="Advances" parent="menu_cash_head_conf" id="menu_open_salary_advance_config" sequence="5"/>
+                <menuitem action="action_salary_advance_policy" id="salary_advance_policies" parent="menu_open_salary_advance_config" name="Salary Advance Policies"/>
+
+            <record model="ir.ui.view" id="view_account_advance_main_form">
+                <field name="name">salary.advance.form</field>
+                <field name="model">salary.advance</field>
+                <field name="arch" type="xml">
+                    <form string="Salary Advances">
+                        <header>
+                           <button name="validate" invisible="state != 'draft'"  class="oe_highlight" string="Confirm" type="object"/>
+                           <button name="approve" invisible="state != 'open'"  class="oe_highlight" string="Approve" type="object" groups="account_cash_advance.advance_manager"/>
+                           <button name="set_to_draft" invisible="state != 'reject'" string="Set to Draft" type="object" groups="account_cash_advance.advance_manager"/>
+                           <button name="set_to_close" invisible="state != 'open'" string="Reject" type="object" groups="account_cash_advance.advance_manager"/>
+                           <button name="create_move" string="Pay"  class="oe_highlight" invisible="state != 'approve'" type="object" groups="account.group_account_user"/>
+                           <button name="set_to_close_paid" invisible="state != 'approve'" string="Reject" type="object" groups="account.group_account_user"/>
+                           <button name="set_to_draft_app" invisible="state != 'cancel'" string="Set to Draft" type="object" groups="account_cash_advance.advance_manager" />
+                           <button name="set_to_cancel" invisible="state != 'draft'" string="Cancel" type="object" groups="account_cash_advance.advance_manager" />
+                           <field name="state" readonly="1" widget="statusbar"/>
+                        </header>
+                        <sheet>
+                            <div class="oe_title">
+                                <label for="name" class="oe_edit_only"/>
+                                <h1><field name="name"/></h1>
+                                <label for="emp_id" class="oe_edit_only"/>
+                                <h2><field name="emp_id"/></h2>
+                            </div>
+                            <group>
+                                <separator string="General" />
+                                <field name="department_id"/>
+                                <field name="advance" readonly="0"/>
+                                <field name="date"/>
+                                <field name="manager_id"/>
+                                <field name="approval_date"/>
+                                <field name="user_id"/>
+                                <field name="company_id" widget="selection" groups="base.group_multi_company"/><newline/>
+                                <separator string="Accounting Information" />
+                                <field name="move" groups="account.group_account_user" invisible="state != 'approve'"/>
+                                <field name="journal_id" groups="account.group_account_user" />
+                                <field name="currency_id" groups="account.group_account_user"   />
+                                <field name="employee_account" groups="account.group_account_user"  />
+                                <field name="move_id1" groups="account.group_account_user" invisible="state == 'draft'"  /><newline/>
+                                <separator string="" /><newline/>
+                                <separator string="Notes" />
+                                <field name="notes" nolabel="1"/>
+                            </group>
+                        </sheet>
+                        <chatter/>
+<!--                        <div class="oe_chatter">-->
+<!--                            <field name="message_follower_ids" widget="mail_followers"/>-->
+<!--                            <field name="message_ids" widget="mail_thread"/>-->
+<!--                        </div>-->
+                    </form>
+                </field>
+            </record>
+
+            <record model="ir.ui.view" id="view_account_advance_main_tree_new">
+                <field name="name">salary.advance.tree</field>
+                <field name="model">salary.advance</field>
+                <field name="arch" type="xml">
+                    <list string="Salary Advances">
+                        <field name="name"/>
+                        <field name="emp_id"/>
+                        <field name="user_id" invisible="1"/>
+                        <field name="department_id" invisible="1"/>
+                        <field name="advance"/>
+                        <field name="date"/>
+                        <field name="approval_date" invisible="0"/>
+                        <field name="journal_id" invisible="1"/>
+                        <field name="employee_account" invisible="1"/>
+                        <field name="manager_id"/>
+                        <field name="company_id" widget="selection" groups="base.group_multi_company"/>
+                        <field name="state" readonly="1" widget="statusbar" colspan="2"/>
+                        <button name="approve" invisible="state != 'open'" string="Approve" type="object" groups="account_cash_advance.advance_manager"  icon="gtk-apply"/>
+                        <button name="set_to_close" invisible="state != 'open'" string="Reject" type="object" groups="account_cash_advance.advance_manager" icon="gtk-close"/>
+                    </list>
+                </field>
+            </record>
+
+            <record model="ir.actions.act_window" id="action_account_advance">
+                <field name="name">Salary Advances Request</field>
+                <field name="res_model">salary.advance</field>
+                <field name="view_mode">list,form</field>
+            </record>
+
+
+            <menuitem name="Staff Advances" parent="menu_cash_head" id="menu_open_salary_advance" sequence="5"/>
+            <menuitem name="Salary Advances" parent="menu_open_salary_advance" id="menu_open_salary_advance_child" sequence="5"/>
+            <menuitem parent="menu_open_salary_advance_child" sequence="1000" id="action_account_advance_menu" action="action_account_advance"/>
+
+            <record model="ir.actions.act_window" id="action_account_advance1">
+                <field name="name">Salary Advances to Approve</field>
+                <field name="res_model">salary.advance</field>
+                <field name="view_mode">list,form</field>
+            </record>
+
+            <menuitem parent="menu_open_salary_advance_child" groups="account_cash_advance.advance_manager" sequence="10001" id="action_account_advance_menu1" action="action_account_advance1"/>
+
+            <record model="ir.actions.act_window" id="action_account_advance_paid">
+                <field name="name">Salary Advance to Disbursement</field>
+                <field name="res_model">salary.advance</field>
+                <field name="view_mode">list,form</field>
+            </record>
+            <menuitem id="menu_finance_advance_salary_main0" name="Staff Advances" parent="account_accountant.menu_account_group" sequence="3"/>
+            <menuitem id="menu_finance_advance_salary_main"  name="Salary Advances" parent="menu_finance_advance_salary_main0" sequence="3000"/>
+            <menuitem id="menu_finance_advance_salary" groups="account_cash_advance.advance_manager" name="Salary Advance to Disbursement" action="action_account_advance_paid" parent="menu_finance_advance_salary_main" sequence="1000"/>
+            <menuitem id="menu_finance_advance_salary" groups="account_cash_advance.advance_manager" name="Salary Advance to Disbursement" action="action_account_advance_paid" parent="menu_open_salary_advance_child" sequence="1000000"/>
+
+
+
+<!--            <record id="action_advance_receipt_form" model="ir.actions.act_window.view">-->
+<!--                <field eval="2" name="sequence"/>-->
+<!--                <field name="view_mode">form</field>-->
+<!--                <field name="view_id" ref="view_vendor_receipt_form11"/>-->
+<!--                <field name="act_window_id" ref="action_salary_repayment"/>-->
+<!--            </record>-->
+
+<!--            <menuitem action="action_salary_repayment" id="salary_advance_menu_payment" parent="menu_finance_advance_salary_main0" name="Advance Repayment" sequence="100100" />-->
+
+<!--            <menuitem action="action_salary_repayment" id="salary_advance_menu_payment" parent="menu_open_salary_advance_child" name="Advance Repayment" sequence="1001000000"/>-->
+
+            <menuitem action="account.action_account_payments" id="salary_advance_menu_payment" parent="menu_open_salary_advance_child" name="Advance Repayment" sequence="1001000000" />
+            <!-- Employee -->f
+
+             <record id="employee_extd_form_advance" model="ir.ui.view">
+                <field name="name">loan.employee.salary.form</field>
+                <field name="model">hr.employee</field>
+                <field name="inherit_id" ref="hr.view_employee_form"/>
+                <field name="arch" type="xml">
+                        <xpath expr="//notebook" position="inside">
+                            <page string="Salary Advances Policies">
+                                    <field name="salary_advance_policy"  nolabel="1" />
+                            </page>
+                            <page string="Salary Advances">
+                                <field name="salary_ids"  nolabel="1"/>
+                        </page>
+                        </xpath>
+                </field>
+            </record>
+
+            <record id="salary_advance_employee_categ_form" model="ir.ui.view">
+                <field name="name">emp.category.form</field>
+                <field name="model">hr.employee.category</field>
+                <field name="inherit_id" ref="hr.view_employee_category_form"/>
+                <field name="arch" type="xml">
+                    <xpath expr="//field[@name='name']" position="after">
+                        <separator string="Salary Advance Policies"/>
+                        <field name="salary_advance_policy" nolabel="1"/>
+                    </xpath>
+                </field>
+            </record>
+
+        </data>
+    </odoo>

@@ -1,0 +1,16 @@
+<odoo>
+    <record id="project_view_form_inherit_project_stock_location" model="ir.ui.view">
+        <field name="name">project.view.form.inherit.project.material.requisition</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='settings']" position="inside">
+                <group>
+                    <group string="Location">
+                        <field name="project_location_id"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

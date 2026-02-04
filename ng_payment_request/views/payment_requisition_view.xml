@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="payment_requisition_form" model="ir.ui.view">
+    <field name='name'>payment.requisition.form</field>
+    <field name='model'>payment.requisition</field>
+    <field name='arch' type='xml'>
+        <form string="Payment Requisition">
+            <header>
+                <button name="action_confirm" invisible="state != 'draft'" string="Submit" type="object" class="oe_highlight"/>
+                <button name="action_hod_approve" invisible="state != 'hod'" string="Approve" type="object" class="oe_highlight"/>
+                <button name="action_internal_approve" groups="ng_payment_request.group_internal" string="Approve" type="object" class="oe_highlight" invisible="state != 'internal'"/>
+                <button name="action_md_approve" groups="ng_payment_request.group_finance_head,ng_payment_request.group_managing_director" string="Approve" type="object" class="oe_highlight" invisible="state != 'md'"/>
+                <button name="action_pay" invisible="state != 'done'" groups="account.group_account_manager" string="Make Payment" type="object" class="oe_highlight"/>
+                <button name="action_refuse" string="Refuse" type="object" invisible="state not in ['group_audit', 'audit', 'ed', 'gmd', 'done']"/>
+                <button name="action_reset" string="Reset to Draft" type="object" class="oe_highlight" invisible="state != 'refused'"/>
+                <button name="action_cancel" string="Cancel" type="object" invisible="state not in ['hod', 'internal', 'md']"/>
+                <field name="state" widget="statusbar" statusbar_visible="draft,hod,internal,md,done,paid"/>
+            </header>
+            <sheet>
+                <h1>
+                    <field name="name" class="oe_inline" readonly="1"/>
+                </h1>
+                <group>
+                    <group>
+                        <field name="requester_id" readonly="state not in ['draft', 'confirm']"/>
+                        <field name="employee_id" readonly="state not in ['draft', 'confirm']"/>
+                        <field name="company_id" readonly="state not in ['draft', 'confirm']"/>
+                    </group>
+                    <group>
+                        <field name="date" readonly="state not in ['draft', 'confirm']"/>
+                        <field name="department_id" readonly="state not in ['draft', 'confirm']"/>
+                        <field name="update_cash" groups="account.group_account_invoice" readonly="state in ['draft', 'confirm']"/>
+                        <field context="{'transfer': True}" groups="account.group_account_invoice" name="cash_id" invisible="not update_cash" required="update_cash"/>
+                    </group>
+                </group>
+                <notebook string="Payment Requisition">
+                    <page string="Payment Request Lines">
+                        <field name="request_line" readonly="state in ['paid', 'cancelled', 'hod', 'md', 'done', 'internal', 'approved']">
+                            <list string="Request Lines" editable="bottom">
+                                <field name="name" readonly="state != 'draft'"/>
+                                <field name="request_amount" sum="Total Requested Amount" readonly="state != 'draft'"/>
+                                <field name="partner_id" readonly="state != 'draft'"/>
+                                <field name="approved_amount" sum="Total Approved Amount" readonly="state != 'draft'"/>
+                                <field name="expense_account_id" readonly="state != 'draft'" force_save="1"/>
+                                <field name="state" column_invisible="1"/>
+                                <field groups="analytic.group_analytic_accounting" name="analytic_account_id" readonly="state != 'done'" required="state == 'done'"/>
+                            </list>
+                        </field>
+                        <group class="oe_subtotal_footer oe_right" name="requested_amount">
+                            <field name="requested_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="approved_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="amount_company_currency" widget="monetary" options="{'currency_field': 'company_id.currency_id'}"/>
+                        </group>
+                        <div class="oe_clear"/>
+                        <separator string="Description"/>
+                        <field name="description" class="oe_inline" placeholder="Description..." readonly="state != 'draft'"/>
+                    </page>
+                    <page string="Accounting" groups="account.group_account_invoice">
+                        <group>
+                            <field name="journal_id" domain="[('type','in',['cash','bank']),('company_id','=',company_id)]" readonly="state != 'done'" required="state == 'done'"/>
+                            <field name="move_id" readonly="1" groups="account.group_account_invoice"/>
+                        </group>
+                    </page>
+                    <page string="Other Info">
+                        <group>
+                            <group>
+                                <field name="bank_id" readonly="state not in ['draft', 'confirm']"/>
+                                <field name="bank_account" readonly="state not in ['draft', 'done']"/>
+                            </group>
+                            <group>
+                                <field name="currency_id" readonly="state not in ['draft', 'done']"/>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </sheet>
+            <chatter/>
+        </form>
+    </field>
+</record>
+<!--        <record id="payment_requisition_form" model="ir.ui.view">-->
+<!--            <field name='name'>payment.requisition.form</field>-->
+<!--            <field name='model'>payment.requisition</field>-->
+<!--            <field name='type'>form</field>-->
+<!--            <field name='arch' type='xml'>-->
+<!--                <form string="Payment Requisition">-->
+<!--                    <header>-->
+<!--                        <button name="action_confirm" states="draft" string="Submit" type="object" class="oe_highlight"/>-->
+<!--                        <button name="action_hod_approve" states="hod" string="Approve" type="object" class="oe_highlight"/>-->
+<!--                        <button name="action_internal_approve" groups="ng_payment_request.group_internal" string="Approve" type="object" class="oe_highlight" states="internal"/>-->
+<!--                        <button name="action_md_approve" groups="ng_payment_request.group_finance_head,ng_payment_request.group_managing_director" string="Approve" type="object" class="oe_highlight" states="md"/>-->
+<!--                        <button name="action_pay" states="done" groups="account.group_account_manager" string="Make Payment" type="object" class="oe_highlight"/>-->
+<!--                        <button name="action_refuse" string="Refuse" type="object" states="group_audit,audit,ed,gmd,done"/>-->
+<!--                        <button name="action_reset" string="Reset to Draft" type="object" class="oe_highlight" states="refused"/>-->
+<!--                        <button name="action_cancel" string="Cancel" type="object" states="hod,internal,md"/>-->
+<!--                        <field name="state" widget="statusbar" statusbar_visible="draft,hod,internal,md,done,paid"/>-->
+<!--                    </header>-->
+<!--                    <sheet>-->
+<!--                        <h1>-->
+<!--                            <field name="name" class="oe_inline" readonly="1"/>-->
+<!--                        </h1>-->
+<!--                        <group>-->
+<!--                            <group>-->
+<!--                                <field name="requester_id" attrs="{'readonly': [('state', 'not in', ('draft', 'confirm'))]}"/>-->
+<!--                                <field name="employee_id" attrs="{'readonly': [('state', 'not in', ('draft', 'confirm'))]}"/>-->
+<!--                                <field name="company_id" attrs="{'readonly': [('state', 'not in', ('draft', 'confirm'))]}"/>-->
+<!--                            </group>-->
+<!--                            <group>-->
+<!--                                <field name="date" attrs="{'readonly': [('state', 'not in', ('draft', 'confirm'))]}"/>-->
+<!--                                <field name="department_id" attrs="{'readonly': [('state', 'not in', ('draft', 'confirm'))]}"/>-->
+<!--                                <field name="update_cash" groups="account.group_account_invoice" attrs="{'readonly': [('state', 'in', ('draft', 'confirm'))]}"/>-->
+<!--                                <field context="{'transfer': True}" groups="account.group_account_invoice" name="cash_id" attrs="{'invisible':[('update_cash','=',False)], 'required':[('update_cash','=',True)]}"/>-->
+<!--                            </group>-->
+<!--                        </group>-->
+<!--                        <notebook string="Payment Requisition">-->
+<!--                            <page string="Payment Request Lines">-->
+<!--                                <field name="request_line" attrs="{'readonly': [('state', 'in', ('paid', 'cancelled', 'hod', 'md', 'done', 'internal', 'approved'))]}">-->
+<!--                                    <list string="Request Lines" editable="bottom">-->
+<!--                                        <field name="name" attrs="{'readonly': [('state', 'not in', ('draft',))]}"/>-->
+<!--                                        <field name="request_amount" sum="Total Requested Amount" attrs="{'readonly': [('state', 'not in', ('draft',))]}"/>-->
+<!--                                        <field name="partner_id" attrs="{'readonly': [('state', 'not in', ('draft',))]}"/>-->
+<!--                                        <field name="approved_amount" sum="Total Approved Amount" attrs="{'readonly': [('state', 'not in', ('draft',))]}"/>-->
+<!--                                        <field name="expense_account_id" attrs="{'readonly': [('state', 'not in', ('draft',))]}" forcesave="1"/>-->
+<!--                                        <field name="state" invisible="1"/>-->
+<!--                                        <field groups="analytic.group_analytic_accounting" name="analytic_account_id" attrs="{'readonly': [('state', '!=', 'done')],'required': [('state', '=', 'done')]}"/>-->
+<!--                                    </list>-->
+<!--                                </field>-->
+<!--                                <group class="oe_subtotal_footer oe_right" name="requested_amount">-->
+<!--                                    <field name="requested_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>-->
+<!--                                    <field name="approved_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>-->
+<!--                                    <field name="amount_company_currency" widget="monetary" options="{'currency_field': 'company_id.currency_id'}"/>-->
+<!--                                </group>-->
+<!--                                <div class="oe_clear"/>-->
+<!--                                <separator string="Description"/>-->
+<!--                                <field name="description" class="oe_inline" placeholder="Description..."  attrs="{'readonly': [('state', 'not in', ('draft',))]}"/>-->
+<!--                            </page>-->
+<!--                            <page string="Accounting" groups="account.group_account_invoice">-->
+<!--                                <group>-->
+<!--                                    <field name="journal_id" domain="[('type','in',['cash','bank']),('company_id','=',company_id)]" attrs="{'readonly': [('state', 'not in', ('done'))],'required': [('state', 'in', ('done'))]}"/>-->
+<!--                                    <field name="move_id" readonly="True" groups="account.group_account_invoice"/>-->
+<!--                                </group>-->
+<!--                            </page>-->
+<!--                            <page string="Other Info">-->
+<!--                                <group>-->
+<!--                                    <group>-->
+<!--                                        <field name="bank_id" attrs="{'readonly': [('state', 'not in', ('draft', 'confirm'))]}"/>-->
+<!--                                        <field name="bank_account" attrs="{'readonly': [('state', 'not in', ('draft', 'done'))]}"/>-->
+<!--                                    </group>-->
+<!--                                    <group>-->
+<!--                                        <field name="currency_id" attrs="{'readonly': [('state', 'not in', ('draft', 'done'))]}"/>-->
+<!--                                    </group>-->
+<!--                                </group>-->
+<!--                            </page>-->
+<!--                        </notebook>-->
+<!--                    </sheet>-->
+<!--                     <chatter/>-->
+<!--&lt;!&ndash;                    <div class="oe_chatter">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <field name="message_ids" widget="mail_thread"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--                </form>-->
+<!--            </field>-->
+<!--        </record>-->
+        <record id='payment_requisition_tree' model='ir.ui.view'>
+            <field name='name'>payment.requisition.tree</field>
+            <field name='model'>payment.requisition</field>
+            <field name='type'>list</field>
+            <field name='arch' type='xml'>
+                <list string='Payment Requisition'>
+                    <field name='name'/>
+                    <field name="requester_id" />
+                    <field name="department_id" />
+                    <field name="date" />
+                    <field name="requested_amount" />
+                    <field name="approved_amount" />
+                    <field name="state" />
+                </list>
+            </field>
+        </record>
+        <record id="search_view_payment_requisition" model="ir.ui.view">
+            <field name="name">Payment Requisition Search View</field>
+            <field name="model">payment.requisition</field>
+            <field name="arch" type="xml">
+                <search string="Payment Requisition">
+<!--                    <field name="name" attrs="{'readonly': [('state', 'not in', ('draft',))]}"/>-->
+                    <field name="name" readonly="state not in ('draft', 'confirm')" />
+<!--                    <field name="name" attrs="{'readonly': [('state', 'not in', ('draft',))]}"/>-->
+                    <field name="state" />
+                    <filter string="Draft" name="draft" domain="[('state','=', 'draft')]" />
+                    <filter string="Await HOD" name="hod" domain="[('state','=', 'hod')]" />
+                    <filter string="Await Internal Control" name="internal" domain="[('state','=', 'internal')]" />
+                    <filter string="Await Head of Finance/MD" name="md" domain="[('state','=', 'md')]" />
+                    <filter string="Approved" name="done" domain="[('state','=', 'done')]" />
+                    <filter string="Paid" name="paid" domain="[('state','=', 'paid')]" />
+                    <filter string="Refused" name="refused" domain="[('state','=', 'refused')]" />
+                    <filter string="Cancelled" name="cancelled" domain="[('state','=', 'cancelled')]" />
+                    <!-- <filter string="Partner" domain="[]" name="partner" context="{'group_by': 'partner_id'}" /> -->
+                    <filter string="Requester" domain="[]" name="requester" context="{'group_by': 'requester_id'}" />
+                    <filter string="Department" domain="[]" name="department" context="{'group_by': 'department_id'}" />
+                    <filter string="State" domain="[]" name="state" context="{'group_by': 'state'}" />
+                </search>
+            </field>
+        </record>
+        <record id='payment_requisition_action' model='ir.actions.act_window'>
+            <field name='name'>Payment Requisition</field>
+            <field name='res_model'>payment.requisition</field>
+            <field name='view_mode'>list,form</field>
+        </record>
+        <menuitem id="payment_requisition_main" name="Payment Requisition" groups="base.group_user" />
+        <menuitem id="payment_requisition_main_menu" name="Payment Requisition" groups="base.group_user" sequence="59" parent="payment_requisition_main" />
+        <menuitem id="payment_requisition_main_menu_1" name="Payment Requisition" parent="payment_requisition_main_menu" groups="base.group_user" sequence="0" action="payment_requisition_action" />
+        <menuitem id="payment_request_main_menu" groups="account.group_account_invoice" name="Payment Requisition" parent="account.account_invoicing_menu" />
+        <menuitem id="payment_request_menu" name="Payment Requisition" parent="payment_request_main_menu" action="payment_requisition_action" />
+    </data>
+</odoo>

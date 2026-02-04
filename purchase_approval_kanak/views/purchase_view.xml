@@ -16,7 +16,9 @@
         <field name="inherit_id" ref="purchase.purchase_order_form" />
         <field name="arch" type="xml">
             <xpath expr="//notebook" position="inside">
-                <page string='Approval Hierarchy' attrs="{'invisible': ['|', ('purchase_order_approval', '=', False), ('purchase_order_approval_rule_id', '=', False)]}">
+<!--                <page string='Approval Hierarchy' attrs="{'invisible': ['|', ('purchase_order_approval', '=', False), ('purchase_order_approval_rule_id', '=', False)]}">-->
+                <page string='Approval Hierarchy'
+                    invisible="not purchase_order_approval or not purchase_order_approval_rule_id">
                     <field name="user_ids" widget="many2many_tags" readonly="1" invisible="1" />
                     <field name='purchase_order_approval_rule_ids' nolabel="1">
                         <list editable='bottom'>
@@ -30,8 +32,9 @@
                         </list>
                     </field>
                 </page>
-                <page string='Approval History' attrs="{'invisible': ['|', ('purchase_order_approval', '=', False), ('purchase_order_approval_rule_id', '=', False)]}">
-                    <field name='purchase_order_approval_history' nolabel="1">
+            <page string='Approval History'
+              invisible="not purchase_order_approval or not purchase_order_approval_rule_id">
+            <field name='purchase_order_approval_history' nolabel="1">
                         <list>
                             <field name='user' />
                             <field name='date' />
@@ -42,58 +45,132 @@
                 </page>
             </xpath>
             <xpath expr="//button[@name='button_confirm'][1]" position="attributes">
-                <attribute name='states'></attribute>
-                <attribute name='attrs'>{'invisible': ['|', '&amp;', ('state','!=','sent'), ('ready_for_po','=',True), '&amp;', ('state','!=','sent'), ('ready_for_po','!=',True)]}</attribute>
-            </xpath>
-            <xpath expr="//button[@name='button_confirm'][2]" position="attributes">
-                <attribute name='states'></attribute>
-                <attribute name='attrs'>{'invisible': ['|', '|', '&amp;', ('state','!=','draft'), ('ready_for_po','=',True), '&amp;', ('state','=','draft'), ('ready_for_po','!=',True), '&amp;', ('state','!=','draft'), ('ready_for_po','!=',True)]}</attribute>
-            </xpath>
-            <xpath expr="//button[@name='print_quotation'][1]" position="attributes">
-                <attribute name='states'></attribute>
-                <attribute name='attrs'>{'invisible': ['|', '|', '&amp;', ('state','!=','draft'), ('ready_for_po','=',True), '&amp;', ('state','=','draft'), ('ready_for_po','!=',True), '&amp;', ('state','!=','draft'), ('ready_for_po','!=',True)]}</attribute>
-            </xpath>
-            <xpath expr="//button[@name='print_quotation'][2]" position="attributes">
-                <attribute name='states'></attribute>
-                <attribute name='attrs'>{'invisible': ['|', '|', '&amp;', ('state','!=','sent'), ('ready_for_po','=',True), '&amp;', ('state','=','sent'), ('ready_for_po','!=',True), '&amp;', ('state','!=','sent'), ('ready_for_po','!=',True)]}</attribute>
-            </xpath>
-            <xpath expr="//button[@name='action_rfq_send'][1]" position="attributes">
-                <attribute name='states'></attribute>
-                <attribute name='attrs'>{'invisible': ['|', '|', '&amp;', ('state','!=','draft'), ('ready_for_po','=',True), '&amp;', ('state','=','draft'), ('ready_for_po','!=',True), '&amp;', ('state','!=','draft'), ('ready_for_po','!=',True)]}</attribute>
-            </xpath>
-            <xpath expr="//button[@name='action_rfq_send'][2]" position="attributes">
-                <attribute name='states'></attribute>
-                <attribute name='attrs'>{'invisible': ['|', '|', '&amp;', ('state','!=','sent'), ('ready_for_po','=',True), '&amp;', ('state','=','sent'), ('ready_for_po','!=',True), '&amp;', ('state','!=','sent'), ('ready_for_po','!=',True)]}</attribute>
-            </xpath>
-            <xpath expr="//button[@name='button_confirm']" position="after">
-                <button name="action_refresh_order" type="object" string="Refresh" groups="base.group_user" attrs="{'invisible': ['|', ('state','!=','draft'), ('purchase_order_approval_rule_ids', '!=', [])]}" />
-                <button name="action_button_approve" string="Approve PO" type="object" groups="base.group_user" attrs="{'invisible': ['|', ('state', 'not in', ['draft', 'sent']), ('approve_button', '!=', True)]}" />
-                <button name="reject_purchase" type="object" string="Reject PO" groups="base.group_user" attrs="{'invisible': ['|', ('state', 'not in', ['draft', 'sent']), ('approve_button', '!=', True)]}" />
-                <field name='approve_button' invisible="1" />
-                <field name='ready_for_po' invisible="1" />
-                <field name='send_for_approval' invisible="1" />
-                <field name='is_rejected' invisible="1" />
-                <field name='purchase_order_approval_rule_id' invisible="1" />
-                <field name='purchase_order_approval' invisible="1" />
-            </xpath>
-            <xpath expr="//button[@name='button_unlock']" position="before">
-                <button name="action_send_for_approval" type="object" string="Send For Approval" groups="base.group_user" attrs="{'invisible': ['|', '|', '|', '|', '&amp;', ('state','!=','draft'), ('send_for_approval','=',True), '&amp;', ('state','=','draft'), ('send_for_approval','=',True), '&amp;', ('state','!=','draft'), ('send_for_approval','!=',True), '|', ('purchase_order_approval', '=', False), ('purchase_order_approval_rule_id', '=', False), ('purchase_order_approval_rule_ids', '=', [])]}" />
-            </xpath>
+<!--    <attribute name='states'></attribute>-->
+    <attribute name='invisible'>(state != 'sent' and ready_for_po) or (state != 'sent' and not ready_for_po)</attribute>
+</xpath>
+
+<xpath expr="//button[@name='button_confirm'][2]" position="attributes">
+<!--    <attribute name='states'></attribute>-->
+    <attribute name='invisible'>(state != 'draft' and ready_for_po) or (state == 'draft' and not ready_for_po) or (state != 'draft' and not ready_for_po)</attribute>
+</xpath>
+
+<xpath expr="//button[@name='print_quotation'][1]" position="attributes">
+<!--    <attribute name='states'></attribute>-->
+    <attribute name='invisible'>(state != 'draft' and ready_for_po) or (state == 'draft' and not ready_for_po) or (state != 'draft' and not ready_for_po)</attribute>
+</xpath>
+
+<xpath expr="//button[@name='print_quotation'][2]" position="attributes">
+<!--    <attribute name='states'></attribute>-->
+    <attribute name='invisible'>(state != 'sent' and ready_for_po) or (state == 'sent' and not ready_for_po) or (state != 'sent' and not ready_for_po)</attribute>
+</xpath>
+
+<xpath expr="//button[@name='action_rfq_send'][1]" position="attributes">
+<!--    <attribute name='states'></attribute>-->
+    <attribute name='invisible'>(state != 'draft' and ready_for_po) or (state == 'draft' and not ready_for_po) or (state != 'draft' and not ready_for_po)</attribute>
+</xpath>
+
+<xpath expr="//button[@name='action_rfq_send'][2]" position="attributes">
+<!--    <attribute name='states'></attribute>-->
+    <attribute name='invisible'>(state != 'sent' and ready_for_po) or (state == 'sent' and not ready_for_po) or (state != 'sent' and not ready_for_po)</attribute>
+</xpath>
+
+<xpath expr="//button[@name='button_confirm']" position="after">
+    <button name="action_refresh_order" type="object" string="Refresh"
+            groups="base.group_user"
+            invisible="state != 'draft' or purchase_order_approval_rule_ids" />
+    <button name="action_button_approve" string="Approve PO" type="object"
+            groups="base.group_user"
+            invisible="state not in ['draft', 'sent'] or not approve_button" />
+    <button name="reject_purchase" type="object" string="Reject PO"
+            groups="base.group_user"
+            invisible="state not in ['draft', 'sent'] or not approve_button" />
+    <field name='approve_button' invisible="1" />
+    <field name='ready_for_po' invisible="1" />
+    <field name='send_for_approval' invisible="1" />
+    <field name='is_rejected' invisible="1" />
+    <field name='purchase_order_approval_rule_id' invisible="1" />
+    <field name='purchase_order_approval' invisible="1" />
+</xpath>
+
+<xpath expr="//button[@name='button_unlock']" position="before">
+    <button name="action_send_for_approval" type="object" string="Send For Approval"
+            groups="base.group_user"
+            invisible="(state != 'draft' and send_for_approval) or (state == 'draft' and send_for_approval) or (state != 'draft' and not send_for_approval) or not purchase_order_approval or not purchase_order_approval_rule_id or not purchase_order_approval_rule_ids" />
+</xpath>
+
             <xpath expr="//button[last()]" position="after">
-                <span class="label label-danger" attrs="{'invisible': ['|', ('ready_for_po', '=', True), ('send_for_approval', '=', False)]}">RFQ is not fully approved yet!</span>
+                <span class="label label-danger"
+                      invisible="ready_for_po or not send_for_approval">RFQ is not fully approved yet!</span>
             </xpath>
+
             <xpath expr="//field[@name='order_line']" position="attributes">
-                <attribute name='attrs'>{'readonly': [('send_for_approval', '=', True), ('is_rejected', '=', False)]}</attribute>
+                <attribute name='readonly'>send_for_approval and not is_rejected</attribute>
             </xpath>
+
             <xpath expr="//field[@name='partner_id']" position="attributes">
-                <attribute name='attrs'>{'readonly': [('send_for_approval', '=', True)]}</attribute>
+                <attribute name='readonly'>send_for_approval</attribute>
             </xpath>
+
             <xpath expr="//field[@name='date_order']" position="attributes">
-                <attribute name='attrs'>{'readonly': [('send_for_approval', '=', True)]}</attribute>
+                <attribute name='readonly'>send_for_approval</attribute>
             </xpath>
+
             <xpath expr="//field[@name='partner_ref']" position="attributes">
-                <attribute name='attrs'>{'readonly': [('send_for_approval', '=', True)]}</attribute>
+                <attribute name='readonly'>send_for_approval</attribute>
             </xpath>
+<!--            <xpath expr="//button[@name='button_confirm'][1]" position="attributes">-->
+<!--                <attribute name='states'></attribute>-->
+<!--                <attribute name='attrs'>{'invisible': ['|', '&amp;', ('state','!=','sent'), ('ready_for_po','=',True), '&amp;', ('state','!=','sent'), ('ready_for_po','!=',True)]}</attribute>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//button[@name='button_confirm'][2]" position="attributes">-->
+<!--                <attribute name='states'></attribute>-->
+<!--                <attribute name='attrs'>{'invisible': ['|', '|', '&amp;', ('state','!=','draft'), ('ready_for_po','=',True), '&amp;', ('state','=','draft'), ('ready_for_po','!=',True), '&amp;', ('state','!=','draft'), ('ready_for_po','!=',True)]}</attribute>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//button[@name='print_quotation'][1]" position="attributes">-->
+<!--                <attribute name='states'></attribute>-->
+<!--                <attribute name='attrs'>{'invisible': ['|', '|', '&amp;', ('state','!=','draft'), ('ready_for_po','=',True), '&amp;', ('state','=','draft'), ('ready_for_po','!=',True), '&amp;', ('state','!=','draft'), ('ready_for_po','!=',True)]}</attribute>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//button[@name='print_quotation'][2]" position="attributes">-->
+<!--                <attribute name='states'></attribute>-->
+<!--                <attribute name='attrs'>{'invisible': ['|', '|', '&amp;', ('state','!=','sent'), ('ready_for_po','=',True), '&amp;', ('state','=','sent'), ('ready_for_po','!=',True), '&amp;', ('state','!=','sent'), ('ready_for_po','!=',True)]}</attribute>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//button[@name='action_rfq_send'][1]" position="attributes">-->
+<!--                <attribute name='states'></attribute>-->
+<!--                <attribute name='attrs'>{'invisible': ['|', '|', '&amp;', ('state','!=','draft'), ('ready_for_po','=',True), '&amp;', ('state','=','draft'), ('ready_for_po','!=',True), '&amp;', ('state','!=','draft'), ('ready_for_po','!=',True)]}</attribute>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//button[@name='action_rfq_send'][2]" position="attributes">-->
+<!--                <attribute name='states'></attribute>-->
+<!--                <attribute name='attrs'>{'invisible': ['|', '|', '&amp;', ('state','!=','sent'), ('ready_for_po','=',True), '&amp;', ('state','=','sent'), ('ready_for_po','!=',True), '&amp;', ('state','!=','sent'), ('ready_for_po','!=',True)]}</attribute>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//button[@name='button_confirm']" position="after">-->
+<!--                <button name="action_refresh_order" type="object" string="Refresh" groups="base.group_user" attrs="{'invisible': ['|', ('state','!=','draft'), ('purchase_order_approval_rule_ids', '!=', [])]}" />-->
+<!--                <button name="action_button_approve" string="Approve PO" type="object" groups="base.group_user" attrs="{'invisible': ['|', ('state', 'not in', ['draft', 'sent']), ('approve_button', '!=', True)]}" />-->
+<!--                <button name="reject_purchase" type="object" string="Reject PO" groups="base.group_user" attrs="{'invisible': ['|', ('state', 'not in', ['draft', 'sent']), ('approve_button', '!=', True)]}" />-->
+<!--                <field name='approve_button' invisible="1" />-->
+<!--                <field name='ready_for_po' invisible="1" />-->
+<!--                <field name='send_for_approval' invisible="1" />-->
+<!--                <field name='is_rejected' invisible="1" />-->
+<!--                <field name='purchase_order_approval_rule_id' invisible="1" />-->
+<!--                <field name='purchase_order_approval' invisible="1" />-->
+<!--            </xpath>-->
+<!--            <xpath expr="//button[@name='button_unlock']" position="before">-->
+<!--                <button name="action_send_for_approval" type="object" string="Send For Approval" groups="base.group_user" attrs="{'invisible': ['|', '|', '|', '|', '&amp;', ('state','!=','draft'), ('send_for_approval','=',True), '&amp;', ('state','=','draft'), ('send_for_approval','=',True), '&amp;', ('state','!=','draft'), ('send_for_approval','!=',True), '|', ('purchase_order_approval', '=', False), ('purchase_order_approval_rule_id', '=', False), ('purchase_order_approval_rule_ids', '=', [])]}" />-->
+<!--            </xpath>-->
+<!--            <xpath expr="//button[last()]" position="after">-->
+<!--                <span class="label label-danger" attrs="{'invisible': ['|', ('ready_for_po', '=', True), ('send_for_approval', '=', False)]}">RFQ is not fully approved yet!</span>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='order_line']" position="attributes">-->
+<!--                <attribute name='attrs'>{'readonly': [('send_for_approval', '=', True), ('is_rejected', '=', False)]}</attribute>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='partner_id']" position="attributes">-->
+<!--                <attribute name='attrs'>{'readonly': [('send_for_approval', '=', True)]}</attribute>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='date_order']" position="attributes">-->
+<!--                <attribute name='attrs'>{'readonly': [('send_for_approval', '=', True)]}</attribute>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='partner_ref']" position="attributes">-->
+<!--                <attribute name='attrs'>{'readonly': [('send_for_approval', '=', True)]}</attribute>-->
+<!--            </xpath>-->
             <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="supplier_rep_ids" widget="many2many_tags" />
             </xpath>

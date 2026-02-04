@@ -7,19 +7,20 @@
         <field name="inherit_id" ref="payment.payment_provider_form"/>
         <field name="arch" type="xml">
             <group name="provider_credentials" position="inside">
-                <group attrs="{'invisible': [('code', '!=', 'payment_monnify')]}"
+<!--                <group attrs="{'invisible': [('code', '!=', 'payment_monnify')]}"-->
+                <group invisible="code!='payment_monnify'"
                        name="monnify_credentials">
                     <field name="monnify_api_key"
                            string="API Key"
-                           attrs="{'required':[('code', '=', 'payment_monnify'), ('state', '!=', 'disabled')]}"/>
+                           required="code == 'payment_monnify' and state!='disabled'"/>
                     <field name="monnify_secret_key"
-                           string="Secret Key"
-                           attrs="{'required':[('code', '=', 'payment_monnify'), ('state', '!=', 'disabled')]}"
-                           password="True"/>
-                    <field name="monnify_contract_code"
-                           string="Contract Code"
-                           attrs="{'required':[('code', '=', 'payment_monnify'), ('state', '!=', 'disabled')]}"
-                           password="True"/>
+                       string="Secret Key"
+                       required="code == 'payment_monnify' and state != 'disabled'"
+                       password="True"/>
+                <field name="monnify_contract_code"
+                       string="Contract Code"
+                       required="code == 'payment_monnify' and state != 'disabled'"
+                       password="True"/>
                 </group>
             </group>
         </field>

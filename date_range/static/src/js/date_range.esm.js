@@ -1,5 +1,5 @@
 /** @odoo-module **/
-import {CustomFilterItem} from "@web/search/filter_menu/custom_filter_item";
+//import {CustomFilterItem} from "@web/search/filter_menu/custom_filter_item";
 import {_lt} from "@web/core/l10n/translation";
 import {patch} from "@web/core/utils/patch";
 import {useService} from "@web/core/utils/hooks";

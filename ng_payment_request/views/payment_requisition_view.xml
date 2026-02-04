@@ -183,7 +183,9 @@
             <field name="model">payment.requisition</field>
             <field name="arch" type="xml">
                 <search string="Payment Requisition">
-                    <field name="name" attrs="{'readonly': [('state', 'not in', ('draft',))]}"/>
+<!--                    <field name="name" attrs="{'readonly': [('state', 'not in', ('draft',))]}"/>-->
+                    <field name="name" readonly="state not in ('draft', 'confirm')" />
+<!--                    <field name="name" attrs="{'readonly': [('state', 'not in', ('draft',))]}"/>-->
                     <field name="state" />
                     <filter string="Draft" name="draft" domain="[('state','=', 'draft')]" />
                     <filter string="Await HOD" name="hod" domain="[('state','=', 'hod')]" />
@@ -203,7 +205,7 @@
         <record id='payment_requisition_action' model='ir.actions.act_window'>
             <field name='name'>Payment Requisition</field>
             <field name='res_model'>payment.requisition</field>
-            <field name='view_mode'>lis,form</field>
+            <field name='view_mode'>list,form</field>
         </record>
         <menuitem id="payment_requisition_main" name="Payment Requisition" groups="base.group_user" />
         <menuitem id="payment_requisition_main_menu" name="Payment Requisition" groups="base.group_user" sequence="59" parent="payment_requisition_main" />

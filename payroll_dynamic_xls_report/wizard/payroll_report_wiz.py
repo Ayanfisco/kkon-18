@@ -5,7 +5,8 @@ from datetime import datetime
 from datetime import date
 from datetime import *
 from io import BytesIO , StringIO
-from odoo.exceptions import except_orm, Warning, RedirectWarning, UserError, ValidationError
+# from odoo.exceptions import  warning, redirectWarning, userError, ValidationError
+
 
 import xlsxwriter
 from PIL import Image as Image

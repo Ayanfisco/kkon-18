@@ -144,11 +144,11 @@ class AccountPayment(models.Model):
             move.write(move._cleanup_write_orm_values(move, move_vals_to_write))
             pay.write(move._cleanup_write_orm_values(pay, payment_vals_to_write))
 
-    @api.depends("journal_id", "partner_id", "partner_type", "is_internal_transfer")
+    @api.depends("journal_id", "partner_id", "partner_type")
     def _compute_destination_account_id(self):
         self.destination_account_id = False
         for pay in self:
-            if pay.is_internal_transfer:
+            if pay:
                 pay.destination_account_id = (
                     pay.journal_id.company_id.transfer_account_id
                 )

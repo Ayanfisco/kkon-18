@@ -46,12 +46,12 @@
         "views/contract_terminate_reason.xml",
         "views/contract_portal_templates.xml",
     ],
-    "assets": {
-        "web.assets_backend": [
-            "contract/static/src/js/section_and_note_fields_backend.js",
-        ],
-        "web.assets_frontend": ["contract/static/src/scss/frontend.scss"],
-        "web.assets_tests": ["contract/static/src/js/contract_portal_tour.js"],
-    },
+    # "assets": {
+    #     "web.assets_backend": [
+    #         "contract/static/src/js/section_and_note_fields_backend.js",
+    #     ],
+    #     "web.assets_frontend": ["contract/static/src/scss/frontend.scss"],
+    #     "web.assets_tests": ["contract/static/src/js/contract_portal_tour.js"],
+    # },
     "installable": True,
 }

@@ -10,7 +10,7 @@ corresponding to the sections and lines.
 this can be applied directly to Odoo*/
 odoo.define("contract.section_and_note_backend", function (require) {
     "use strict";
-//
+
     require("account.section_and_note_backend");
     var fieldRegistry = require("web.field_registry");
     var section_and_note_one2many = fieldRegistry.get("section_and_note_one2many");

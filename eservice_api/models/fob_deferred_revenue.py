@@ -19,6 +19,7 @@ class FobDeferredRevenue(models.Model):
         "account.journal",
         string="Journal",
         readonly=True,
+        readonly="state != 'draft'",
     )
     partner_id = fields.Many2one(
         "res.partner",
@@ -29,7 +30,7 @@ class FobDeferredRevenue(models.Model):
     duration = fields.Integer(
         "Number of Installments",
         readonly=True,
-
+        readonly="state != 'draft'",
     )
     duration_unit = fields.Selection(
         selection=[
@@ -39,44 +40,44 @@ class FobDeferredRevenue(models.Model):
         string="Unit",
         default="months",
         readonly=True,
-
+        readonly="state != 'draft'",
     )
     currency_id = fields.Many2one(
         "res.currency",
         string="Currency",
         readonly=True,
-
+        readonly="state != 'draft'",
     )
     deferred_revenue_account_id = fields.Many2one(
         "account.account",
         string="Deferred Income Account",
         domain="[('account_type', '=', 'liability_current')]",
         readonly=True,
-
+        readonly="state != 'draft'",
     )
     revenue_account_id = fields.Many2one(
         "account.account",
         string="Income Account",
         domain="[('account_type', 'in', ('income', 'income_other'))]",
         readonly=True,
-
+        readonly="state != 'draft'",
     )
     amount_initial = fields.Float(
         "Initial Amount",
         readonly=True,
-
+        readonly="state != 'draft'",
     )
     is_model = fields.Boolean(
         "Is Model?",
         readonly=True,
-
+        readonly="state != 'draft'",
         copy=False,
     )
     model_id = fields.Many2one(
         "fob.deferred.revenue",
         string="Model",
         readonly=True,
-
+        readonly="state != 'draft'",
     )
     state = fields.Selection(
         [
@@ -202,18 +203,18 @@ class FobDeferredRevenueLine(models.Model):
     date_revenue = fields.Date(
         "Revenue Date",
         readonly=True,
-
+        readonly="state != 'draft'",
     )
     name = fields.Char("Journal Entry", default="/")
     ref = fields.Char(
         "Reference",
         readonly=True,
-
+        readonly="state != 'draft'",
     )
     amount = fields.Float(
         "Installment",
         readonly=True,
-
+        readonly="state != 'draft'",
     )
     state = fields.Selection(
         related="revenue_id.state", string="State"

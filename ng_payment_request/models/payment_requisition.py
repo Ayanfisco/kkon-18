@@ -148,7 +148,7 @@ class PaymentRequest(models.Model):
     update_cash = fields.Boolean(
         string="Update Cash Register?",
         readonly=False,
-
+        states={"draft": [("readonly", True)]},
         help="Tick if you want to update cash register by creating cash transaction line.",
     )
     cash_id = fields.Many2one(

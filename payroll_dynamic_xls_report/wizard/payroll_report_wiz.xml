@@ -14,15 +14,9 @@
                 </group>
                 <group>
                     <field name="filter" widget="radio"/>
-                   <field name="employee_id"
-                           invisible="filter != 'employee'"
-                           required="filter == 'employee'"/>
-                    <field name="department_id"
-                           invisible="filter != 'department'"
-                           required="filter == 'department'"/>
-                    <field name="company_id"
-                           invisible="filter != 'company'"
-                           required="filter == 'company'"/>
+                    <field name="employee_id"  attrs="{'invisible':[('filter','!=','employee')],'required':[('filter','=','employee')]}"/>
+                    <field name="department_id" attrs="{'invisible':[('filter','!=','department')],'required':[('filter','=','department')]}"/>
+                    <field name="company_id" attrs="{'invisible':[('filter','!=','company')],'required':[('filter','=','company')]}"/>
                 </group>
               <footer>
                     <button name="get_item_data" type="object" string="Export Excel" class="oe_highlight"/>

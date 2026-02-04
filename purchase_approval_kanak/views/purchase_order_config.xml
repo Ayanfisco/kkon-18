@@ -7,7 +7,7 @@
         <field name="priority" eval="25" />
         <field name="inherit_id" ref="base.res_config_settings_view_form" />
         <field name="arch" type="xml">
-            <xpath expr="//form" position="inside">
+            <xpath expr="//field[@name='po_order_approval']//..//.." position="after">
                 <div class="col-12 col-lg-6 o_setting_box">
                     <div class="o_setting_left_pane">
                         <field name="purchase_order_approval" />
@@ -18,18 +18,14 @@
                             Set Purchase Approval Rule
                         </div>
                         <div class="text-muted">
-                            <field name="purchase_order_approval_rule_id"
-                               invisible="not purchase_order_approval"
-                               required="purchase_order_approval" />
-<!--                            <field name="purchase_order_approval_rule_id" invisible="purchase_order_approval != True" required="purchase_order_approval = True" />-->
-<!--                            <field name="purchase_order_approval_rule_id" attrs="{'invisible': [('purchase_order_approval', '!=', True)], 'required': [('purchase_order_approval', '=', True)]}" />-->
+                            <field name="purchase_order_approval_rule_id" attrs="{'invisible': [('purchase_order_approval', '!=', True)], 'required': [('purchase_order_approval', '=', True)]}" />
                         </div>
                     </div>
                 </div>
             </xpath>
-<!--            <xpath expr="//label[@for='po_order_approval']" position="attributes">-->
-<!--                <attribute name="string">Purchase Order Approval By Amount</attribute>-->
-<!--            </xpath>-->
+            <xpath expr="//label[@for='po_order_approval']" position="attributes">
+                <attribute name="string">Purchase Order Approval By Amount</attribute>
+            </xpath>
         </field>
     </record>
     <record id="purchase_order_apporval_rule_form" model="ir.ui.view">

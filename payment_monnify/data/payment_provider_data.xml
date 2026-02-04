@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
 
-<record id="payment_provider_monnify" model="payment.provider">
-    <field name="name">Monnify</field>
-    <field name="image_128" type="base64" file="payment_monnify/static/description/icon.png"/>
-    <field name="code">payment_monnify</field>
-    <field name="redirect_form_view_id" ref="redirect_form"/>
-    <field name="allow_tokenization">True</field>
-    <field name="monnify_api_key">dummy</field>
-    <field name="monnify_secret_key">dummy</field>
-    <field name="monnify_contract_code">dummy</field>
-</record>
+    <record id="payment_provider_monnify" model="payment.provider">
+        <field name="name">Monnify</field>
+        <field name="display_as">Monnify</field>
+        <field name="image_128" type="base64" file="payment_monnify/static/description/icon.png" />
+        <field name="code">payment_monnify</field>
+        <field name="redirect_form_view_id" ref="redirect_form"/>
+        <field name="allow_tokenization">True</field>
+        <field name="monnify_api_key">dummy</field>
+        <field name="monnify_secret_key">dummy</field>
+        <field name="monnify_contract_code">dummy</field>
+    </record>
 
 </odoo>

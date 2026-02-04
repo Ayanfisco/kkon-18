@@ -213,7 +213,7 @@
                                 <field name="transferred" readonly="1" />
                                 <field name="state" string="State" />
                                 <field name="button_show_state" column_invisible="1" />
-<!--                                <button name="procure" type="object" string="Procure" class="oe_link" invisible="state in ['available', 'awaiting']" groups="masterenergy_base_approval.group_store_officer" />-->
+                                <button name="procure" type="object" string="Procure" class="oe_link" invisible="state in ['available', 'awaiting']" groups="masterenergy_base_approval.group_store_officer" />
                             </list>
                         </field>
                     </page>
@@ -221,7 +221,6 @@
             </sheet>
             <chatter/>
         </form>
-
     </field>
 </record>
 

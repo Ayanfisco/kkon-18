@@ -28,7 +28,7 @@ class AuditRule(models.Model):
         'ir.model', 'Model', required=True,
         help='Select model for which you want to generate log.',
         domain=[('model', '!=', 'audit.log')],
-        readonly=True,
+        readonly=True, states={'draft': [('readonly', False)]},
         ondelete='cascade')
     action_id = fields.Many2one(
         'ir.actions.act_window', "Add in the 'More' menu", readonly=True)

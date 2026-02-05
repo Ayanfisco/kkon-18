@@ -3,7 +3,7 @@
 {
     'name': "Automatic Backup (Google Drive, Dropbox, Amazon S3, FTP, SFTP, Local)",
 	'category': 'Extra Tools',
-	'version': '1.3.1', 
+	'version': '18.0.0.1.0', 
 	
     'summary': 'Automatic Backup -(Google Drive, Dropbox, Amazon S3, FTP, SFTP, Local)',
     'description': "Automatic Backup -(Google Drive, Dropbox, Amazon S3, FTP, SFTP, Local)",

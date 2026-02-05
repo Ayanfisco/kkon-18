@@ -25,16 +25,16 @@ from odoo.addons.google_account.models.google_service import GOOGLE_TOKEN_ENDPOI
 import sys, subprocess
 from dateutil.relativedelta import relativedelta
 py_v = "python%s.%s" % (sys.version_info.major,sys.version_info.minor)
-try:
-    import dropbox
-except ImportError:
-    print('\n There was no such module named -dropbox- installed')
-    print('xxxxxxxxxxxxxxxx installing dropbox xxxxxxxxxxxxxx')
-    subprocess.check_call([py_v, "-m", "pip", "install","--user", "dropbox"])
-    import dropbox
-from dropbox.files import WriteMode
-from dropbox.exceptions import ApiError, AuthError
-from dropbox import DropboxOAuth2FlowNoRedirect  
+# try:
+#     import dropbox
+# except ImportError:
+#     print('\n There was no such module named -dropbox- installed')
+#     print('xxxxxxxxxxxxxxxx installing dropbox xxxxxxxxxxxxxx')
+#     subprocess.check_call([py_v, "-m", "pip", "install","--user", "dropbox"])
+#     import dropbox
+# from dropbox.files import WriteMode
+# from dropbox.exceptions import ApiError, AuthError
+# from dropbox import DropboxOAuth2FlowNoRedirect  
 import http.client  
 try:
     import ftplib

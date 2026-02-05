@@ -1,1 +1,4 @@
 dropbox
+pysftp
+boto3
+pydrive

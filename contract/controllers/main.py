@@ -1,6 +1,8 @@
 # Copyright 2020-2022 Tecnativa - Víctor Martínez
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+import utils.transport
+import utils.session
 from odoo import _, http
 from odoo.exceptions import AccessError, MissingError
 from odoo.http import request

@@ -25,63 +25,19 @@ from odoo.addons.google_account.models.google_service import GOOGLE_TOKEN_ENDPOI
 import sys, subprocess
 from dateutil.relativedelta import relativedelta
 py_v = "python%s.%s" % (sys.version_info.major,sys.version_info.minor)
-# try:
-#     import dropbox
-# except ImportError:
-#     print('\n There was no such module named -dropbox- installed')
-#     print('xxxxxxxxxxxxxxxx installing dropbox xxxxxxxxxxxxxx')
-#     subprocess.check_call([py_v, "-m", "pip", "install","--user", "dropbox"])
-#     import dropbox
-# from dropbox.files import WriteMode
-# from dropbox.exceptions import ApiError, AuthError
-# from dropbox import DropboxOAuth2FlowNoRedirect  
+# Replace the entire section from line 29 to line 83 with:
+import dropbox
+from dropbox.files import WriteMode
+from dropbox.exceptions import ApiError, AuthError
+from dropbox import DropboxOAuth2FlowNoRedirect  
 import http.client  
-try:
-    import ftplib
-except ImportError:
-    print('\n There was no such module named -ftplib- installed')
-    print('xxxxxxxxxxxxxxxx installing ftplib xxxxxxxxxxxxxx')
-    subprocess.check_call([py_v, "-m", "pip", "install","--user", "ftplib"])
-    import ftplib
-
-try:
-    import paramiko
-except ImportError:
-    print('\n There was no such module named -paramiko- installed')
-    print('xxxxxxxxxxxxxxxx installing paramiko xxxxxxxxxxxxxx')
-    subprocess.check_call([py_v, "-m", "pip", "install","--user", "paramiko"])
-    import paramiko
-try:
-    import boto3
-    from botocore.exceptions import ClientError
-except ImportError:
-    print('\n There was no such module named -boto3- installed')
-    print('xxxxxxxxxxxxxxxx installing boto3 xxxxxxxxxxxxxx')
-    subprocess.check_call([py_v, "-m", "pip", "install","--user", "boto3"])
-    import boto3
-    from botocore.exceptions import ClientError
-try:
-    import paramiko    
-    from paramiko.ssh_exception import SSHException
-except ImportError:
-    print('\n There was no such module named -paramiko- installed')
-    print('xxxxxxxxxxxxxxxx installing paramiko xxxxxxxxxxxxxx')
-    subprocess.check_call([py_v, "-m", "pip", "install","--user", "paramiko"])
-    import paramiko    
-    from paramiko.ssh_exception import SSHException
-    
-import base64
-import io
-try:
-    from pydrive2.auth import GoogleAuth
-    from pydrive2.drive import GoogleDrive
-except ImportError:
-    print('\n There was no such module named -pydrive2- installed')
-    print('xxxxxxxxxxxxxxxx installing pydrive2 xxxxxxxxxxxxxx')
-    subprocess.check_call([py_v, "-m", "pip", "install","--user", "pydrive2"])
-    from pydrive2.auth import GoogleAuth
-    from pydrive2.drive import GoogleDrive
-
+import ftplib
+import paramiko
+from paramiko.ssh_exception import SSHException
+import boto3
+from botocore.exceptions import ClientError
+from pydrive2.auth import GoogleAuth
+from pydrive2.drive import GoogleDrive
 
 _intervalTypes = {
     'days': lambda interval: relativedelta(days=interval),
